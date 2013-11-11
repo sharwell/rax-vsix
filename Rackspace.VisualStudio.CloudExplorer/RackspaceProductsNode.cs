@@ -20,7 +20,6 @@
         internal static Node[] EmptyChildren = new Node[0];
 
         private readonly Bitmap _icon = new Bitmap(16, 16);
-        private Node[] _children;
 
         public RackspaceProductsNode()
         {
