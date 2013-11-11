@@ -6,7 +6,7 @@ using System.Runtime.InteropServices;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("Rackspace.VisualStudio.CloudExplorer")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyDescription("Server Explorer support for Rackspace cloud products")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Rackspace, Inc.")]
 [assembly: AssemblyProduct("Rackspace.VisualStudio.CloudExplorer")]
