@@ -4,6 +4,7 @@
     using System.Drawing;
     using System.Runtime.Serialization;
     using Microsoft.VSDesigner.ServerExplorer;
+    using Rackspace.VisualStudio.CloudExplorer.Dns;
 
     [Serializable]
     public class RackspaceProductsNode : Node, ISerializable, IChildrenNotSerializable
@@ -20,6 +21,7 @@
         internal static Node[] EmptyChildren = new Node[0];
 
         private readonly Bitmap _icon = new Bitmap(16, 16);
+        private Node[] _children;
 
         public RackspaceProductsNode()
         {
@@ -34,7 +36,15 @@
 
         public override Node[] CreateChildren()
         {
-            return EmptyChildren;
+            if (_children == null)
+            {
+                _children = new Node[]
+                {
+                    new CloudDnsRootNode()
+                };
+            }
+
+            return _children;
         }
 
         public override Image Icon

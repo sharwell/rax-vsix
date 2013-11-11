@@ -53,6 +53,9 @@
     <Compile Include="AsyncNode.cs" />
     <Compile Include="CloudExplorerPackage.cs" />
     <Compile Include="CloudProductRootNode.cs" />
+    <Compile Include="Dns\CloudDnsRootNode.cs" />
+    <Compile Include="Dns\CloudDnsTenantNode.cs" />
+    <Compile Include="Dns\CloudDomainNode.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ProvideServerExplorerNodeAttribute.cs" />
     <Compile Include="RackspaceProductsNode.cs" />
