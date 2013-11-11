@@ -5,3 +5,6 @@
 # User-specific Visual Studio files
 *.user
 *.suo
+
+# Restored by NuGet during the build
+/packages/
