@@ -6,6 +6,7 @@
     using Microsoft.VSDesigner.ServerExplorer;
     using Rackspace.VisualStudio.CloudExplorer.Dns;
     using Rackspace.VisualStudio.CloudExplorer.LoadBalancers;
+    using Rackspace.VisualStudio.CloudExplorer.Queues;
 
     [Serializable]
     public class RackspaceProductsNode : Node, ISerializable, IChildrenNotSerializable
@@ -42,6 +43,7 @@
                 _children = new Node[]
                 {
                     new CloudLoadBalancersRootNode(),
+                    new CloudQueuesRootNode(),
                     new CloudDnsRootNode()
                 };
             }
