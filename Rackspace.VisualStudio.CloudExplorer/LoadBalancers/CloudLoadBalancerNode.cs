@@ -84,6 +84,7 @@
             }
 
             [DisplayName("ID")]
+            [Category(PropertyCategories.Identity)]
             public LoadBalancerId Id
             {
                 get
@@ -93,6 +94,7 @@
             }
 
             [DisplayName("Name")]
+            [Category(PropertyCategories.Identity)]
             public string Name
             {
                 get
@@ -102,6 +104,7 @@
             }
 
             [DisplayName("Region")]
+            [Category(PropertyCategories.Identity)]
             public string Region
             {
                 get

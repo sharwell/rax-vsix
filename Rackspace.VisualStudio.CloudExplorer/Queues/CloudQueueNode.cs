@@ -85,6 +85,7 @@
             }
 
             [DisplayName("URI")]
+            [Category(PropertyCategories.Identity)]
             public string Uri
             {
                 get
@@ -94,6 +95,7 @@
             }
 
             [DisplayName("Name")]
+            [Category(PropertyCategories.Identity)]
             public string Name
             {
                 get
@@ -103,6 +105,7 @@
             }
 
             [DisplayName("Region")]
+            [Category(PropertyCategories.Identity)]
             public string Region
             {
                 get

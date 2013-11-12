@@ -84,6 +84,7 @@
             }
 
             [DisplayName("ID")]
+            [Category(PropertyCategories.Identity)]
             public DomainId Id
             {
                 get
@@ -93,6 +94,7 @@
             }
 
             [DisplayName("Name")]
+            [Category(PropertyCategories.Identity)]
             public string Name
             {
                 get

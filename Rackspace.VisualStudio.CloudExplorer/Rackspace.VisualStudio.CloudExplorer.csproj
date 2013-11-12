@@ -60,6 +60,7 @@
     <Compile Include="LoadBalancers\CloudLoadBalancersRootNode.cs" />
     <Compile Include="LoadBalancers\CloudLoadBalancersTenantNode.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="PropertyCategories.cs" />
     <Compile Include="ProvideServerExplorerNodeAttribute.cs" />
     <Compile Include="Queues\CloudQueueNode.cs" />
     <Compile Include="Queues\CloudQueuesRootNode.cs" />
