@@ -5,7 +5,10 @@
     using System.Drawing;
     using System.Threading;
     using System.Threading.Tasks;
+    using System.Windows.Forms;
+    using Microsoft.VisualStudio;
     using Microsoft.VSDesigner.ServerExplorer;
+    using net.openstack.Core;
     using net.openstack.Providers.Rackspace;
     using net.openstack.Providers.Rackspace.Objects.Dns;
     using LocalizableProperties = Microsoft.VisualStudio.Shell.LocalizableProperties;
@@ -14,6 +17,8 @@
     {
         private readonly CloudDnsProvider _provider;
         private readonly DnsDomain _domain;
+
+        private bool _deleting;
 
         public CloudDomainNode(CloudDnsProvider provider, DnsDomain domain)
         {
@@ -48,18 +53,48 @@
         {
             get
             {
+                if (_deleting)
+                    return string.Format("{0} (Deleting...)", _domain.Name);
+
                 return _domain.Name;
             }
         }
 
         public override bool CanDeleteNode()
         {
-            return true;
+            return !_deleting;
         }
 
         public override bool ConfirmDeletingNode()
         {
-            throw new NotImplementedException();
+            string message = string.Format("Are you sure you want to delete the domain \"{0}\"?", _domain.Name);
+            INodeSite nodeSite = GetNodeSite();
+            if (nodeSite.ShowMessageBox(message, MessageBoxButtons.YesNo, MessageBoxIcon.Question) != DialogResult.Yes)
+                return false;
+
+            try
+            {
+                _deleting = true;
+                nodeSite.UpdateLabel();
+                using (CancellationTokenSource cancellationTokenSource = new CancellationTokenSource(TimeSpan.FromSeconds(60)))
+                {
+                    _provider.RemoveDomainsAsync(new[] { _domain.Id }, false, AsyncCompletionOption.RequestCompleted, cancellationTokenSource.Token, null).Wait();
+                }
+
+                return true;
+            }
+            catch (Exception ex)
+            {
+                if (ErrorHandler.IsCriticalException(ex))
+                    throw;
+
+                nodeSite.ShowMessageBox(string.Format("Could not delete domain: {0}", ex.Message), MessageBoxButtons.OK, MessageBoxIcon.Hand);
+                return false;
+            }
+            finally
+            {
+                _deleting = false;
+            }
         }
 
         public override object GetBrowseComponent()

@@ -4,17 +4,22 @@
     using System.ComponentModel;
     using System.Drawing;
     using System.Threading.Tasks;
+    using System.Windows.Forms;
+    using Microsoft.VisualStudio;
     using Microsoft.VSDesigner.ServerExplorer;
     using net.openstack.Core.Domain.Queues;
     using net.openstack.Providers.Rackspace;
     using Newtonsoft.Json;
     using CancellationToken = System.Threading.CancellationToken;
+    using CancellationTokenSource = System.Threading.CancellationTokenSource;
     using LocalizableProperties = Microsoft.VisualStudio.Shell.LocalizableProperties;
 
     public class CloudQueueNode : AsyncNode
     {
         private readonly CloudQueuesProvider _provider;
         private readonly CloudQueue _queue;
+
+        private bool _deleting;
 
         public CloudQueueNode(CloudQueuesProvider provider, CloudQueue queue)
         {
@@ -49,18 +54,48 @@
         {
             get
             {
+                if (_deleting)
+                    return string.Format("{0} (Deleting...)", _queue.Name);
+
                 return _queue.Name.Value;
             }
         }
 
         public override bool CanDeleteNode()
         {
-            return true;
+            return !_deleting;
         }
 
         public override bool ConfirmDeletingNode()
         {
-            throw new NotImplementedException();
+            string message = string.Format("Are you sure you want to delete the queue \"{0}\"?", _queue.Name);
+            INodeSite nodeSite = GetNodeSite();
+            if (nodeSite.ShowMessageBox(message, MessageBoxButtons.YesNo, MessageBoxIcon.Question) != DialogResult.Yes)
+                return false;
+
+            try
+            {
+                _deleting = true;
+                nodeSite.UpdateLabel();
+                using (CancellationTokenSource cancellationTokenSource = new CancellationTokenSource(TimeSpan.FromSeconds(60)))
+                {
+                    _provider.DeleteQueueAsync(_queue.Name, cancellationTokenSource.Token).Wait();
+                }
+
+                return true;
+            }
+            catch (Exception ex)
+            {
+                if (ErrorHandler.IsCriticalException(ex))
+                    throw;
+
+                nodeSite.ShowMessageBox(string.Format("Could not delete queue: {0}", ex.Message), MessageBoxButtons.OK, MessageBoxIcon.Hand);
+                return false;
+            }
+            finally
+            {
+                _deleting = false;
+            }
         }
 
         public override object GetBrowseComponent()

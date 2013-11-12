@@ -5,6 +5,10 @@
     using System.Drawing;
     using System.Threading;
     using System.Threading.Tasks;
+    using System.Windows.Forms;
+    using Microsoft.VisualStudio;
+    using Microsoft.VSDesigner.ServerExplorer;
+    using net.openstack.Core;
     using net.openstack.Providers.Rackspace;
     using net.openstack.Providers.Rackspace.Objects.LoadBalancers;
     using LocalizableProperties = Microsoft.VisualStudio.Shell.LocalizableProperties;
@@ -14,6 +18,8 @@
     {
         private readonly CloudLoadBalancerProvider _provider;
         private readonly LoadBalancer _loadBalancer;
+
+        private bool _deleting;
 
         public CloudLoadBalancerNode(CloudLoadBalancerProvider provider, LoadBalancer loadBalancer)
         {
@@ -48,18 +54,48 @@
         {
             get
             {
+                if (_deleting)
+                    return string.Format("{0} (Deleting...)", _loadBalancer.Name);
+
                 return _loadBalancer.Name;
             }
         }
 
         public override bool CanDeleteNode()
         {
-            return true;
+            return !_deleting;
         }
 
         public override bool ConfirmDeletingNode()
         {
-            throw new NotImplementedException();
+            string message = string.Format("Are you sure you want to delete the load balancer \"{0}\"?", _loadBalancer.Name);
+            INodeSite nodeSite = GetNodeSite();
+            if (nodeSite.ShowMessageBox(message, MessageBoxButtons.YesNo, MessageBoxIcon.Question) != DialogResult.Yes)
+                return false;
+
+            try
+            {
+                _deleting = true;
+                nodeSite.UpdateLabel();
+                using (CancellationTokenSource cancellationTokenSource = new CancellationTokenSource(TimeSpan.FromSeconds(60)))
+                {
+                    _provider.RemoveLoadBalancerAsync(_loadBalancer.Id, AsyncCompletionOption.RequestCompleted, cancellationTokenSource.Token, null).Wait();
+                }
+
+                return true;
+            }
+            catch (Exception ex)
+            {
+                if (ErrorHandler.IsCriticalException(ex))
+                    throw;
+
+                nodeSite.ShowMessageBox(string.Format("Could not delete load balancer: {0}", ex.Message), MessageBoxButtons.OK, MessageBoxIcon.Hand);
+                return false;
+            }
+            finally
+            {
+                _deleting = false;
+            }
         }
 
         public override object GetBrowseComponent()
