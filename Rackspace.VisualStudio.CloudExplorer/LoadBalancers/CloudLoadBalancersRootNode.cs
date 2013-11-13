@@ -37,7 +37,7 @@
         {
             get
             {
-                return RackspaceProductsNode.EmptyIcon;
+                return ServerExplorerIcons.CloudLoadBalancers;
             }
         }
 

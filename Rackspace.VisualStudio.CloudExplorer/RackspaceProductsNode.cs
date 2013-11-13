@@ -22,19 +22,19 @@
         internal static Image EmptyIcon;
         internal static Node[] EmptyChildren = new Node[0];
 
-        private readonly Bitmap _icon = new Bitmap(16, 16);
+        private readonly Lazy<Image> _icon = new Lazy<Image>(() => Resources.CloudDatabaseIcon);
         private Node[] _children;
 
         public RackspaceProductsNode()
         {
             if (EmptyIcon == null)
-                EmptyIcon = _icon;
+                EmptyIcon = new Bitmap(16, 16);
         }
 
         protected RackspaceProductsNode(SerializationInfo info, StreamingContext context)
         {
             if (EmptyIcon == null)
-                EmptyIcon = _icon;
+                EmptyIcon = new Bitmap(16, 16);
         }
 
         public override int CompareUnique(Node node)
@@ -61,7 +61,7 @@
         {
             get
             {
-                return _icon;
+                return _icon.Value;
             }
         }
 

@@ -46,7 +46,7 @@
         {
             get
             {
-                return RackspaceProductsNode.EmptyIcon;
+                return ServerExplorerIcons.CloudDatabases;
             }
         }
 

@@ -59,7 +59,7 @@
         {
             get
             {
-                return RackspaceProductsNode.EmptyIcon;
+                return ServerExplorerIcons.PrivateCloud;
             }
         }
 
