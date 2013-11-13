@@ -31,6 +31,12 @@
                 EmptyIcon = _icon;
         }
 
+        protected RackspaceProductsNode(SerializationInfo info, StreamingContext context)
+        {
+            if (EmptyIcon == null)
+                EmptyIcon = _icon;
+        }
+
         public override int CompareUnique(Node node)
         {
             return 0;
