@@ -26,7 +26,7 @@
             {
                 List<Node> nodes = new List<Node>();
                 foreach (Endpoint endpoint in _serviceCatalog.Endpoints)
-                    nodes.Add(new CloudLoadBalancersEndpointNode(_identity, endpoint));
+                    nodes.Add(new CloudLoadBalancersEndpointNode(_identity, _serviceCatalog, endpoint));
 
                 _children = nodes.ToArray();
             }

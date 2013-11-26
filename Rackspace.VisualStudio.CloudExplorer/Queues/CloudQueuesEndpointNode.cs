@@ -11,8 +11,8 @@
 
     public class CloudQueuesEndpointNode : EndpointNode
     {
-        public CloudQueuesEndpointNode(CloudIdentity identity, Endpoint endpoint)
-            : base(identity, endpoint)
+        public CloudQueuesEndpointNode(CloudIdentity identity, ServiceCatalog serviceCatalog, Endpoint endpoint)
+            : base(identity, serviceCatalog, endpoint)
         {
         }
 

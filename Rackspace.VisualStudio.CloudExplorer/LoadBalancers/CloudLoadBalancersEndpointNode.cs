@@ -11,8 +11,8 @@
 
     public class CloudLoadBalancersEndpointNode : EndpointNode
     {
-        public CloudLoadBalancersEndpointNode(CloudIdentity identity, Endpoint endpoint)
-            : base(identity, endpoint)
+        public CloudLoadBalancersEndpointNode(CloudIdentity identity, ServiceCatalog serviceCatalog, Endpoint endpoint)
+            : base(identity, serviceCatalog, endpoint)
         {
         }
 

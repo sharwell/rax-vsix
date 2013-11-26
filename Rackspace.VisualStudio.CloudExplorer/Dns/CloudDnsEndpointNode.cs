@@ -11,8 +11,8 @@
 
     public class CloudDnsEndpointNode : EndpointNode
     {
-        public CloudDnsEndpointNode(CloudIdentity identity, Endpoint endpoint)
-            : base(identity, endpoint)
+        public CloudDnsEndpointNode(CloudIdentity identity, ServiceCatalog serviceCatalog, Endpoint endpoint)
+            : base(identity, serviceCatalog, endpoint)
         {
         }
 
