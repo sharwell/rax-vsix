@@ -1,36 +1,30 @@
 ﻿namespace Rackspace.VisualStudio.CloudExplorer.Queues
 {
+    using System.Collections.Generic;
     using System.Drawing;
     using System.Threading;
     using System.Threading.Tasks;
     using Microsoft.VSDesigner.ServerExplorer;
     using net.openstack.Core.Domain;
-    using Newtonsoft.Json;
-    using Newtonsoft.Json.Linq;
 
     public class CloudQueuesRootNode : CloudProductRootNode
     {
+        private CloudIdentity _identity;
+        private ServiceCatalog _serviceCatalog;
+
+        public CloudQueuesRootNode(CloudIdentity identity, ServiceCatalog serviceCatalog)
+        {
+            _identity = identity;
+            _serviceCatalog = serviceCatalog;
+        }
+
         protected override Task<Node[]> CreateChildrenAsync(CancellationToken cancellationToken)
         {
-            JObject developerSettings = DeveloperSettings;
-            if (developerSettings == null)
-                return Task.FromResult(RackspaceProductsNode.EmptyChildren);
+            List<Node> nodes = new List<Node>();
+            foreach (Endpoint endpoint in _serviceCatalog.Endpoints)
+                nodes.Add(new CloudQueuesEndpointNode(_identity, endpoint));
 
-            JObject testIdentity = developerSettings["TestIdentity"] as JObject;
-            if (testIdentity == null)
-                return Task.FromResult(RackspaceProductsNode.EmptyChildren);
-
-            try
-            {
-                CloudIdentity identity = testIdentity.ToObject<CloudIdentity>();
-                if (!string.IsNullOrEmpty(identity.Username))
-                    return Task.FromResult(new Node[] { new CloudQueuesTenantNode(identity) });
-            }
-            catch (JsonSerializationException)
-            {
-            }
-
-            return Task.FromResult(RackspaceProductsNode.EmptyChildren);
+            return Task.FromResult(nodes.ToArray());
         }
 
         public override Image Icon

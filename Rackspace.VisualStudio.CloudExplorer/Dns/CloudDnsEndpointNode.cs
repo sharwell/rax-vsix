@@ -7,28 +7,18 @@
     using System.Threading.Tasks;
     using Microsoft.VSDesigner.ServerExplorer;
     using net.openstack.Core.Domain;
-    using net.openstack.Core.Providers;
     using net.openstack.Providers.Rackspace;
     using net.openstack.Providers.Rackspace.Objects.Dns;
 
-    public class CloudDnsTenantNode : AsyncNode
+    public class CloudDnsEndpointNode : AsyncNode
     {
         private readonly CloudIdentity _identity;
-        private string _tenantId;
+        private readonly Endpoint _endpoint;
 
-        public CloudDnsTenantNode(CloudIdentity identity)
+        public CloudDnsEndpointNode(CloudIdentity identity, Endpoint endpoint)
         {
             _identity = identity;
-
-            IIdentityService identityService = new CloudIdentityProvider();
-            identityService.GetTokenAsync(identity, CancellationToken.None).ContinueWith(
-                task =>
-                {
-                    _tenantId = task.Result.Tenant.Id;
-                    INodeSite nodeSite = GetNodeSite();
-                    if (nodeSite != null)
-                        nodeSite.UpdateLabel();
-                });
+            _endpoint = endpoint;
         }
 
         public override int CompareUnique(Node node)
@@ -49,10 +39,15 @@
 
         private async Task<Tuple<CloudDnsProvider, DnsDomain[]>> ListDomainsAsync(CancellationToken cancellationToken)
         {
-            CloudDnsProvider provider = new CloudDnsProvider(_identity, null, false, null);
+            CloudDnsProvider provider = CreateProvider();
             List<DnsDomain> domains = new List<DnsDomain>();
             domains.AddRange((await provider.ListDomainsAsync(null, null, null, cancellationToken)).Item1);
             return Tuple.Create(provider, domains.ToArray());
+        }
+
+        private CloudDnsProvider CreateProvider()
+        {
+            return new CloudDnsProvider(_identity, _endpoint.Region, false, null);
         }
 
         public override Image Icon
@@ -67,12 +62,10 @@
         {
             get
             {
-                if (!string.IsNullOrEmpty(_identity.Username) && !string.IsNullOrEmpty(_tenantId))
-                    return string.Format("{0} ({1})", _identity.Username, _tenantId);
-                else if (!string.IsNullOrEmpty(_identity.Username))
-                    return _identity.Username;
+                if (!string.IsNullOrEmpty(_endpoint.Region))
+                    return _endpoint.Region;
 
-                return _tenantId ?? string.Empty;
+                return "Global";
             }
         }
 
