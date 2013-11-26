@@ -18,8 +18,6 @@
         private readonly CloudDnsProvider _provider;
         private readonly DnsDomain _domain;
 
-        private bool _deleting;
-
         public CloudDomainNode(CloudDnsProvider provider, DnsDomain domain)
         {
             if (provider == null)
@@ -53,48 +51,29 @@
         {
             get
             {
-                if (_deleting)
-                    return string.Format("{0} (Deleting...)", _domain.Name);
-
                 return _domain.Name;
             }
         }
 
         public override bool CanDeleteNode()
         {
-            return !_deleting;
+            return !IsDeleting;
         }
 
-        public override bool ConfirmDeletingNode()
+        protected override DialogResult ConfirmUserDeletingNodeImpl()
         {
             string message = string.Format("Are you sure you want to delete the domain \"{0}\"?", _domain.Name);
             INodeSite nodeSite = GetNodeSite();
-            if (nodeSite.ShowMessageBox(message, MessageBoxButtons.YesNo, MessageBoxIcon.Question) != DialogResult.Yes)
-                return false;
+            if (nodeSite == null)
+                return DialogResult.Cancel;
 
-            try
-            {
-                _deleting = true;
-                nodeSite.UpdateLabel();
-                using (CancellationTokenSource cancellationTokenSource = new CancellationTokenSource(TimeSpan.FromSeconds(60)))
-                {
-                    _provider.RemoveDomainsAsync(new[] { _domain.Id }, false, AsyncCompletionOption.RequestCompleted, cancellationTokenSource.Token, null).Wait();
-                }
+            return nodeSite.ShowMessageBox(message, MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question);
+        }
 
-                return true;
-            }
-            catch (Exception ex)
-            {
-                if (ErrorHandler.IsCriticalException(ex))
-                    throw;
-
-                nodeSite.ShowMessageBox(string.Format("Could not delete domain: {0}", ex.Message), MessageBoxButtons.OK, MessageBoxIcon.Hand);
-                return false;
-            }
-            finally
-            {
-                _deleting = false;
-            }
+        protected override async Task<bool> DeleteNodeAsync(CancellationToken cancellationToken)
+        {
+            await _provider.RemoveDomainsAsync(new[] { _domain.Id }, false, AsyncCompletionOption.RequestCompleted, cancellationToken, null);
+            return true;
         }
 
         public override object GetBrowseComponent()
