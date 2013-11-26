@@ -12,6 +12,8 @@
         private CloudIdentity _identity;
         private ServiceCatalog _serviceCatalog;
 
+        private Node[] _children;
+
         public CloudLoadBalancersRootNode(CloudIdentity identity, ServiceCatalog serviceCatalog)
         {
             _identity = identity;
@@ -20,11 +22,16 @@
 
         protected override Task<Node[]> CreateChildrenAsync(CancellationToken cancellationToken)
         {
-            List<Node> nodes = new List<Node>();
-            foreach (Endpoint endpoint in _serviceCatalog.Endpoints)
-                nodes.Add(new CloudLoadBalancersEndpointNode(_identity, endpoint));
+            if (_children == null)
+            {
+                List<Node> nodes = new List<Node>();
+                foreach (Endpoint endpoint in _serviceCatalog.Endpoints)
+                    nodes.Add(new CloudLoadBalancersEndpointNode(_identity, endpoint));
 
-            return Task.FromResult(nodes.ToArray());
+                _children = nodes.ToArray();
+            }
+
+            return Task.FromResult(_children);
         }
 
         public override Image Icon

@@ -21,6 +21,8 @@
         private readonly CloudIdentityProvider _provider;
         private string _tenantId;
 
+        private Node[] _children;
+
         public CloudProjectNode(CloudIdentity identity)
         {
             _identity = identity;
@@ -71,33 +73,38 @@
 
         protected override async Task<Node[]> CreateChildrenAsync(CancellationToken cancellationToken)
         {
-            UserAccess userAccess = await _provider.GetUserAccessAsync(_identity, false, cancellationToken);
-            if (userAccess == null || userAccess.ServiceCatalog == null || userAccess.ServiceCatalog.Length == 0)
-                return RackspaceProductsNode.EmptyChildren;
-
-            List<Node> nodes = new List<Node>();
-            foreach (ServiceCatalog serviceCatalog in userAccess.ServiceCatalog)
+            if (_children == null)
             {
-                switch (serviceCatalog.Type)
+                UserAccess userAccess = await _provider.GetUserAccessAsync(_identity, false, cancellationToken);
+                if (userAccess == null || userAccess.ServiceCatalog == null || userAccess.ServiceCatalog.Length == 0)
+                    return RackspaceProductsNode.EmptyChildren;
+
+                List<Node> nodes = new List<Node>();
+                foreach (ServiceCatalog serviceCatalog in userAccess.ServiceCatalog)
                 {
-                case "rax:dns":
-                    nodes.Add(new CloudDnsRootNode(_identity, serviceCatalog));
-                    break;
+                    switch (serviceCatalog.Type)
+                    {
+                    case "rax:dns":
+                        nodes.Add(new CloudDnsRootNode(_identity, serviceCatalog));
+                        break;
 
-                case "rax:queues":
-                    nodes.Add(new CloudQueuesRootNode(_identity, serviceCatalog));
-                    break;
+                    case "rax:queues":
+                        nodes.Add(new CloudQueuesRootNode(_identity, serviceCatalog));
+                        break;
 
-                case "rax:load-balancer":
-                    nodes.Add(new CloudLoadBalancersRootNode(_identity, serviceCatalog));
-                    break;
+                    case "rax:load-balancer":
+                        nodes.Add(new CloudLoadBalancersRootNode(_identity, serviceCatalog));
+                        break;
 
-                default:
-                    break;
+                    default:
+                        break;
+                    }
                 }
+
+                _children = nodes.ToArray();
             }
 
-            return nodes.ToArray();
+            return _children;
         }
 
         public override int CompareUnique(Node node)
