@@ -9,8 +9,8 @@
 
     public class CloudDnsRootNode : CloudProductRootNode
     {
-        private CloudIdentity _identity;
-        private ServiceCatalog _serviceCatalog;
+        private readonly CloudIdentity _identity;
+        private readonly ServiceCatalog _serviceCatalog;
 
         private Node[] _children;
 
