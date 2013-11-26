@@ -2,7 +2,6 @@
 {
     using System;
     using System.Collections.Generic;
-    using System.Drawing;
     using System.Threading;
     using System.Threading.Tasks;
     using Microsoft.VSDesigner.ServerExplorer;
@@ -10,20 +9,11 @@
     using net.openstack.Providers.Rackspace;
     using net.openstack.Providers.Rackspace.Objects.Dns;
 
-    public class CloudDnsEndpointNode : AsyncNode
+    public class CloudDnsEndpointNode : EndpointNode
     {
-        private readonly CloudIdentity _identity;
-        private readonly Endpoint _endpoint;
-
         public CloudDnsEndpointNode(CloudIdentity identity, Endpoint endpoint)
+            : base(identity, endpoint)
         {
-            _identity = identity;
-            _endpoint = endpoint;
-        }
-
-        public override int CompareUnique(Node node)
-        {
-            return Label.CompareTo(node.Label);
         }
 
         protected override async Task<Node[]> CreateChildrenAsync(CancellationToken cancellationToken)
@@ -47,31 +37,7 @@
 
         private CloudDnsProvider CreateProvider()
         {
-            return new CloudDnsProvider(_identity, _endpoint.Region, false, null);
-        }
-
-        public override Image Icon
-        {
-            get
-            {
-                return ServerExplorerIcons.PrivateCloud;
-            }
-        }
-
-        protected override string DisplayText
-        {
-            get
-            {
-                if (!string.IsNullOrEmpty(_endpoint.Region))
-                    return _endpoint.Region;
-
-                return "Global";
-            }
-        }
-
-        public override bool CanDeleteNode()
-        {
-            return false;
+            return new CloudDnsProvider(Identity, Endpoint.Region, false, null);
         }
     }
 }

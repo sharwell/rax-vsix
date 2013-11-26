@@ -2,7 +2,6 @@
 {
     using System;
     using System.Collections.Generic;
-    using System.Drawing;
     using System.Threading;
     using System.Threading.Tasks;
     using Microsoft.VSDesigner.ServerExplorer;
@@ -10,20 +9,11 @@
     using net.openstack.Providers.Rackspace;
     using LoadBalancer = net.openstack.Providers.Rackspace.Objects.LoadBalancers.LoadBalancer;
 
-    public class CloudLoadBalancersEndpointNode : AsyncNode
+    public class CloudLoadBalancersEndpointNode : EndpointNode
     {
-        private readonly CloudIdentity _identity;
-        private readonly Endpoint _endpoint;
-
         public CloudLoadBalancersEndpointNode(CloudIdentity identity, Endpoint endpoint)
+            : base(identity, endpoint)
         {
-            _identity = identity;
-            _endpoint = endpoint;
-        }
-
-        public override int CompareUnique(Node node)
-        {
-            return Label.CompareTo(node.Label);
         }
 
         protected override async Task<Node[]> CreateChildrenAsync(CancellationToken cancellationToken)
@@ -47,31 +37,7 @@
 
         private CloudLoadBalancerProvider CreateProvider()
         {
-            return new CloudLoadBalancerProvider(_identity, _endpoint.Region, null);
-        }
-
-        public override Image Icon
-        {
-            get
-            {
-                return ServerExplorerIcons.PrivateCloud;
-            }
-        }
-
-        protected override string DisplayText
-        {
-            get
-            {
-                if (!string.IsNullOrEmpty(_endpoint.Region))
-                    return _endpoint.Region;
-
-                return "Global";
-            }
-        }
-
-        public override bool CanDeleteNode()
-        {
-            return false;
+            return new CloudLoadBalancerProvider(Identity, Endpoint.Region, null);
         }
     }
 }
