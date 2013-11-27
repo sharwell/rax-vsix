@@ -71,6 +71,7 @@
     <Compile Include="EndpointNode.cs" />
     <Compile Include="Files\CloudFilesContainerNode.cs" />
     <Compile Include="Files\CloudFilesEndpointNode.cs" />
+    <Compile Include="Files\CloudFilesObjectNode.cs" />
     <Compile Include="Files\CloudFilesRootNode.cs" />
     <Compile Include="LoadBalancers\CloudLoadBalancerNode.cs" />
     <Compile Include="LoadBalancers\CloudLoadBalancersEndpointNode.cs" />

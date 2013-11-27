@@ -1,7 +1,6 @@
 ﻿namespace Rackspace.VisualStudio.CloudExplorer.Files
 {
     using System;
-    using System.Collections.Generic;
     using System.ComponentModel;
     using System.Threading;
     using System.Threading.Tasks;
@@ -13,22 +12,24 @@
     using Image = System.Drawing.Image;
     using LocalizableProperties = Microsoft.VisualStudio.Shell.LocalizableProperties;
 
-    public class CloudFilesContainerNode : AsyncNode
+    public class CloudFilesObjectNode : AsyncNode
     {
         private readonly CloudFilesProvider _provider;
         private readonly Container _container;
-        private readonly ContainerCDN _containerCdn;
+        private readonly ContainerObject _containerObject;
 
-        public CloudFilesContainerNode(CloudFilesProvider provider, Container container, ContainerCDN containerCdn)
+        public CloudFilesObjectNode(CloudFilesProvider provider, Container container, ContainerObject containerObject)
         {
             if (provider == null)
                 throw new ArgumentNullException("provider");
             if (container == null)
                 throw new ArgumentNullException("container");
+            if (containerObject == null)
+                throw new ArgumentNullException("containerObject");
 
             _provider = provider;
             _container = container;
-            _containerCdn = containerCdn;
+            _containerObject = containerObject;
         }
 
         public override int CompareUnique(Node node)
@@ -36,22 +37,14 @@
             return Label.CompareTo(node.Label);
         }
 
-        protected override async Task<Node[]> CreateChildrenAsync(CancellationToken cancellationToken)
+        public override bool IsAlwaysLeaf()
         {
-            ContainerObject[] objects = await ListObjectsAsync(cancellationToken);
-            return Array.ConvertAll(objects, i => CreateObjectNode(i));
+            return true;
         }
 
-        private CloudFilesObjectNode CreateObjectNode(ContainerObject containerObject)
+        protected override Task<Node[]> CreateChildrenAsync(CancellationToken cancellationToken)
         {
-            return new CloudFilesObjectNode(_provider, _container, containerObject);
-        }
-
-        private async Task<ContainerObject[]> ListObjectsAsync(CancellationToken cancellationToken)
-        {
-            List<ContainerObject> objects = new List<ContainerObject>();
-            objects.AddRange(await Task.Run(() => _provider.ListObjects(_container.Name)));
-            return objects.ToArray();
+            return Task.FromResult(RackspaceProductsNode.EmptyChildren);
         }
 
         public override Image Icon
@@ -66,7 +59,7 @@
         {
             get
             {
-                return _container.Name;
+                return _containerObject.Name;
             }
         }
 
@@ -77,7 +70,7 @@
 
         protected override DialogResult ConfirmUserDeletingNodeImpl()
         {
-            string message = string.Format("Are you sure you want to delete the container \"{0}\" (and all its contents)?", _container.Name);
+            string message = string.Format("Are you sure you want to delete the object \"{0}\"?", _containerObject.Name);
             INodeSite nodeSite = GetNodeSite();
             if (nodeSite == null)
                 return DialogResult.Cancel;
@@ -90,32 +83,34 @@
             await Task.Run(
                 () =>
                 {
-                    _provider.DeleteContainer(_container.Name, deleteObjects: true);
+                    _provider.DeleteObject(_container.Name, _containerObject.Name);
                 });
             return true;
         }
 
         public override object GetBrowseComponent()
         {
-            return new ContainerProperties(_provider, _container, _containerCdn);
+            return new ObjectProperties(_provider, _container, _containerObject);
         }
 
-        public class ContainerProperties : LocalizableProperties, ICustomTypeDescriptor
+        public class ObjectProperties : LocalizableProperties, ICustomTypeDescriptor
         {
             private readonly CloudFilesProvider _provider;
             private readonly Container _container;
-            private readonly ContainerCDN _containerCdn;
+            private readonly ContainerObject _containerObject;
 
-            public ContainerProperties(CloudFilesProvider provider, Container container, ContainerCDN containerCdn)
+            public ObjectProperties(CloudFilesProvider provider, Container container, ContainerObject containerObject)
             {
                 if (provider == null)
                     throw new ArgumentNullException("provider");
                 if (container == null)
                     throw new ArgumentNullException("container");
+                if (containerObject == null)
+                    throw new ArgumentNullException("containerObject");
 
                 _provider = provider;
                 _container = container;
-                _containerCdn = containerCdn;
+                _containerObject = containerObject;
             }
 
             [DisplayName("Name")]
@@ -124,7 +119,7 @@
             {
                 get
                 {
-                    return _container.Name;
+                    return _containerObject.Name;
                 }
             }
 
@@ -138,27 +133,46 @@
                 }
             }
 
+            [DisplayName("ETag")]
+            [Category(PropertyCategories.Identity)]
+            public string ETag
+            {
+                get
+                {
+                    return _containerObject.Hash;
+                }
+            }
+
             [DisplayName("Size")]
             public long Size
             {
                 get
                 {
-                    return _container.Bytes;
+                    return _containerObject.Bytes;
                 }
             }
 
-            [DisplayName("Object Count")]
-            public long Count
+            [DisplayName("Content Type")]
+            public string ContentType
             {
                 get
                 {
-                    return _container.Count;
+                    return _containerObject.ContentType;
+                }
+            }
+
+            [DisplayName("Last Modified")]
+            public DateTimeOffset LastModified
+            {
+                get
+                {
+                    return _containerObject.LastModified;
                 }
             }
 
             public override string GetClassName()
             {
-                return "Container Properties";
+                return "Object Properties";
             }
 
             string ICustomTypeDescriptor.GetComponentName()
