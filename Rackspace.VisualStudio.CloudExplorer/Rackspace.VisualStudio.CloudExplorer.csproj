@@ -69,6 +69,7 @@
     <Compile Include="Dns\CloudDnsRootNode.cs" />
     <Compile Include="Dns\CloudDomainNode.cs" />
     <Compile Include="EndpointNode.cs" />
+    <Compile Include="Files\CloudFilesContainerNode.cs" />
     <Compile Include="Files\CloudFilesEndpointNode.cs" />
     <Compile Include="Files\CloudFilesRootNode.cs" />
     <Compile Include="LoadBalancers\CloudLoadBalancerNode.cs" />
