@@ -9,9 +9,16 @@
     using Microsoft.VSDesigner.ServerExplorer;
     using net.openstack.Core.Domain;
     using net.openstack.Providers.Rackspace;
+    using Rackspace.VisualStudio.CloudExplorer.Autoscale;
+    using Rackspace.VisualStudio.CloudExplorer.Backup;
+    using Rackspace.VisualStudio.CloudExplorer.BlockStorage;
+    using Rackspace.VisualStudio.CloudExplorer.Databases;
     using Rackspace.VisualStudio.CloudExplorer.Dns;
+    using Rackspace.VisualStudio.CloudExplorer.Files;
     using Rackspace.VisualStudio.CloudExplorer.LoadBalancers;
+    using Rackspace.VisualStudio.CloudExplorer.Monitoring;
     using Rackspace.VisualStudio.CloudExplorer.Queues;
+    using Rackspace.VisualStudio.CloudExplorer.Servers;
     using DialogResult = System.Windows.Forms.DialogResult;
     using Image = System.Drawing.Image;
     using MessageBoxButtons = System.Windows.Forms.MessageBoxButtons;
@@ -86,16 +93,46 @@
                 {
                     switch (serviceCatalog.Type)
                     {
+                    case "compute":
+                        if (serviceCatalog.Name.Equals("cloudServersOpenStack", StringComparison.OrdinalIgnoreCase))
+                            nodes.Add(new CloudServersRootNode(serviceCatalog, _identity));
+
+                        break;
+
+                    case "object-store":
+                        nodes.Add(new CloudFilesRootNode(serviceCatalog, _identity));
+                        break;
+
+                    case "volume":
+                        nodes.Add(new CloudBlockStorageRootNode(serviceCatalog, _identity));
+                        break;
+
+                    case "rax:autoscale":
+                        nodes.Add(new CloudAutoscaleRootNode(serviceCatalog, _identity));
+                        break;
+
+                    case "rax:backup":
+                        nodes.Add(new CloudBackupRootNode(serviceCatalog, _identity));
+                        break;
+
+                    case "rax:database":
+                        nodes.Add(new CloudDatabasesRootNode(serviceCatalog, _identity));
+                        break;
+
                     case "rax:dns":
                         nodes.Add(new CloudDnsRootNode(serviceCatalog, _identity));
                         break;
 
-                    case "rax:queues":
-                        nodes.Add(new CloudQueuesRootNode(serviceCatalog, _identity));
-                        break;
-
                     case "rax:load-balancer":
                         nodes.Add(new CloudLoadBalancersRootNode(serviceCatalog, _identity));
+                        break;
+
+                    case "rax:monitor":
+                        nodes.Add(new CloudMonitoringRootNode(serviceCatalog, _identity));
+                        break;
+
+                    case "rax:queues":
+                        nodes.Add(new CloudQueuesRootNode(serviceCatalog, _identity));
                         break;
 
                     default:

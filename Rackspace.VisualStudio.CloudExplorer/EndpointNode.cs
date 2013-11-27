@@ -106,7 +106,7 @@
             }
 
             [Browsable(false)]
-            public CloudIdentity Identity
+            protected CloudIdentity Identity
             {
                 get
                 {
@@ -115,7 +115,7 @@
             }
 
             [Browsable(false)]
-            public ServiceCatalog ServiceCatalog
+            protected ServiceCatalog ServiceCatalog
             {
                 get
                 {
@@ -124,7 +124,7 @@
             }
 
             [Browsable(false)]
-            public Endpoint Endpoint
+            protected Endpoint Endpoint
             {
                 get
                 {

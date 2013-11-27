@@ -51,19 +51,32 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="AsyncNode.cs" />
+    <Compile Include="Autoscale\CloudAutoscaleEndpointNode.cs" />
+    <Compile Include="Autoscale\CloudAutoscaleRootNode.cs" />
+    <Compile Include="Backup\CloudBackupEndpointNode.cs" />
+    <Compile Include="Backup\CloudBackupRootNode.cs" />
+    <Compile Include="BlockStorage\CloudBlockStorageEndpointNode.cs" />
+    <Compile Include="BlockStorage\CloudBlockStorageRootNode.cs" />
     <Compile Include="CloudExplorerPackage.cs" />
     <Compile Include="CloudProductRootNode.cs" />
     <Compile Include="CloudProjectNode.cs" />
     <Compile Include="Credentials\AddCredentials.xaml.cs">
       <DependentUpon>AddCredentials.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Databases\CloudDatabasesEndpointNode.cs" />
+    <Compile Include="Databases\CloudDatabasesRootNode.cs" />
     <Compile Include="Dns\CloudDnsEndpointNode.cs" />
     <Compile Include="Dns\CloudDnsRootNode.cs" />
     <Compile Include="Dns\CloudDomainNode.cs" />
     <Compile Include="EndpointNode.cs" />
+    <Compile Include="Files\CloudFilesEndpointNode.cs" />
+    <Compile Include="Files\CloudFilesRootNode.cs" />
     <Compile Include="LoadBalancers\CloudLoadBalancerNode.cs" />
     <Compile Include="LoadBalancers\CloudLoadBalancersEndpointNode.cs" />
     <Compile Include="LoadBalancers\CloudLoadBalancersRootNode.cs" />
+    <Compile Include="Monitoring\CloudMonitoringEndpointNode.cs" />
+    <Compile Include="Monitoring\CloudMonitoringRootNode.cs" />
+    <Compile Include="NotImplementedPlaceholderNode.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="PropertyCategories.cs" />
     <Compile Include="ProvideServerExplorerNodeAttribute.cs" />
@@ -77,6 +90,8 @@
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
     <Compile Include="ServerExplorerIcons.cs" />
+    <Compile Include="Servers\CloudServersEndpointNode.cs" />
+    <Compile Include="Servers\CloudServersRootNode.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\keys\cloudexplorer.snk">
@@ -132,9 +147,13 @@
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
+    <Content Include="Resources\cloud-backup-icon.png" />
     <Content Include="Resources\cloud-database-icon.png" />
     <Content Include="Resources\cloud-dns-icon.png" />
+    <Content Include="Resources\cloud-files-icon.png" />
     <Content Include="Resources\cloud-load-balancers-icon.png" />
+    <Content Include="Resources\cloud-monitoring-icon.png" />
+    <Content Include="Resources\cloud-servers-icon.png" />
     <Content Include="Resources\private-cloud-icon.png" />
   </ItemGroup>
   <ItemGroup>

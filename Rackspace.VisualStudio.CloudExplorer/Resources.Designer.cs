@@ -63,6 +63,16 @@ namespace Rackspace.VisualStudio.CloudExplorer {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap CloudBackupIcon {
+            get {
+                object obj = ResourceManager.GetObject("CloudBackupIcon", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap CloudDatabaseIcon {
             get {
                 object obj = ResourceManager.GetObject("CloudDatabaseIcon", resourceCulture);
@@ -83,9 +93,39 @@ namespace Rackspace.VisualStudio.CloudExplorer {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap CloudFilesIcon {
+            get {
+                object obj = ResourceManager.GetObject("CloudFilesIcon", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap CloudLoadBalancersIcon {
             get {
                 object obj = ResourceManager.GetObject("CloudLoadBalancersIcon", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap CloudMonitoringIcon {
+            get {
+                object obj = ResourceManager.GetObject("CloudMonitoringIcon", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap CloudServersIcon {
+            get {
+                object obj = ResourceManager.GetObject("CloudServersIcon", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
