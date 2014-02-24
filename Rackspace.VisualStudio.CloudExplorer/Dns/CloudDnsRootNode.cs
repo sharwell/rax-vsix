@@ -10,14 +10,13 @@
     public class CloudDnsRootNode : CloudProductRootNode
     {
         private readonly CloudIdentity _identity;
-        private readonly ServiceCatalog _serviceCatalog;
 
         private Node[] _children;
 
-        public CloudDnsRootNode(CloudIdentity identity, ServiceCatalog serviceCatalog)
+        public CloudDnsRootNode(ServiceCatalog serviceCatalog, CloudIdentity identity)
+            : base(serviceCatalog)
         {
             _identity = identity;
-            _serviceCatalog = serviceCatalog;
         }
 
         protected override Task<Node[]> CreateChildrenAsync(CancellationToken cancellationToken)
@@ -25,8 +24,8 @@
             if (_children == null)
             {
                 List<Node> nodes = new List<Node>();
-                foreach (Endpoint endpoint in _serviceCatalog.Endpoints)
-                    nodes.Add(new CloudDnsEndpointNode(_identity, _serviceCatalog, endpoint));
+                foreach (Endpoint endpoint in ServiceCatalog.Endpoints)
+                    nodes.Add(new CloudDnsEndpointNode(_identity, ServiceCatalog, endpoint));
 
                 _children = nodes.ToArray();
             }

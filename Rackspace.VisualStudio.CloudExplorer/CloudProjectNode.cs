@@ -85,15 +85,15 @@
                     switch (serviceCatalog.Type)
                     {
                     case "rax:dns":
-                        nodes.Add(new CloudDnsRootNode(_identity, serviceCatalog));
+                        nodes.Add(new CloudDnsRootNode(serviceCatalog, _identity));
                         break;
 
                     case "rax:queues":
-                        nodes.Add(new CloudQueuesRootNode(_identity, serviceCatalog));
+                        nodes.Add(new CloudQueuesRootNode(serviceCatalog, _identity));
                         break;
 
                     case "rax:load-balancer":
-                        nodes.Add(new CloudLoadBalancersRootNode(_identity, serviceCatalog));
+                        nodes.Add(new CloudLoadBalancersRootNode(serviceCatalog, _identity));
                         break;
 
                     default:
