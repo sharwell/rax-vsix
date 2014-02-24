@@ -105,6 +105,7 @@
                 _endpoint = endpoint;
             }
 
+            [Browsable(false)]
             public CloudIdentity Identity
             {
                 get
@@ -113,6 +114,7 @@
                 }
             }
 
+            [Browsable(false)]
             public ServiceCatalog ServiceCatalog
             {
                 get
@@ -121,6 +123,7 @@
                 }
             }
 
+            [Browsable(false)]
             public Endpoint Endpoint
             {
                 get
