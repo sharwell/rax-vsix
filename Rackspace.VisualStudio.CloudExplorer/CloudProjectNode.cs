@@ -2,8 +2,10 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.ComponentModel;
     using System.Threading;
     using System.Threading.Tasks;
+    using Microsoft.VisualStudio.Shell;
     using Microsoft.VSDesigner.ServerExplorer;
     using net.openstack.Core.Domain;
     using net.openstack.Providers.Rackspace;
@@ -117,6 +119,70 @@
             get
             {
                 return ServerExplorerIcons.PrivateCloud;
+            }
+        }
+
+        public override object GetBrowseComponent()
+        {
+            return new CloudProjectProperties(this);
+        }
+
+        protected class CloudProjectProperties : LocalizableProperties, ICustomTypeDescriptor
+        {
+            private readonly CloudProjectNode _projectNode;
+
+            public CloudProjectProperties(CloudProjectNode projectNode)
+            {
+                if (projectNode == null)
+                    throw new ArgumentNullException("projectNode");
+
+                _projectNode = projectNode;
+            }
+
+            [DisplayName("Identity Service")]
+            [Category(PropertyCategories.Identity)]
+            public string IdentityEndpoint
+            {
+                get
+                {
+                    // TODO: return the base URL of the identity service
+                    return "Unknown...";
+                }
+            }
+
+            [DisplayName("Username")]
+            [Category(PropertyCategories.Identity)]
+            public string UserName
+            {
+                get
+                {
+                    return _projectNode._identity.Username;
+                }
+            }
+
+            [DisplayName("Project ID")]
+            [Category(PropertyCategories.Identity)]
+            public string ProjectID
+            {
+                get
+                {
+                    string result = _projectNode._tenantId;
+                    if (!string.IsNullOrEmpty(result))
+                        return result;
+
+                    // after 1.3.2 is released, CloudIdentityWithProject will be handled here
+                    return null;
+                }
+            }
+
+            public override string GetClassName()
+            {
+                return "Project Properties";
+            }
+
+            string ICustomTypeDescriptor.GetComponentName()
+            {
+                return _projectNode.DisplayText;
             }
         }
     }
