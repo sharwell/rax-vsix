@@ -28,11 +28,6 @@
             return false;
         }
 
-        public override sealed int CompareUnique(Node node)
-        {
-            return Label.CompareTo(node.Label);
-        }
-
         public override object GetBrowseComponent()
         {
             if (_serviceCatalog != null)

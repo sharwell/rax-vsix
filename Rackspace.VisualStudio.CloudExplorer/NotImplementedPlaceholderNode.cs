@@ -25,11 +25,6 @@
             return Task.FromResult(RackspaceProductsNode.EmptyChildren);
         }
 
-        public override int CompareUnique(Node node)
-        {
-            return Label.CompareTo(node.Label);
-        }
-
         public override Image Icon
         {
             get

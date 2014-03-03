@@ -30,11 +30,6 @@
             _loadBalancer = loadBalancer;
         }
 
-        public override int CompareUnique(Node node)
-        {
-            return Label.CompareTo(node.Label);
-        }
-
         protected override Task<Node[]> CreateChildrenAsync(CancellationToken cancellationToken)
         {
             return Task.FromResult(RackspaceProductsNode.EmptyChildren);

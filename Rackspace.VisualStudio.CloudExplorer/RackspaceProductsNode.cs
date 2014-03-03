@@ -56,11 +56,6 @@
             }
         }
 
-        public override int CompareUnique(Node node)
-        {
-            return 0;
-        }
-
         public override Image Icon
         {
             get

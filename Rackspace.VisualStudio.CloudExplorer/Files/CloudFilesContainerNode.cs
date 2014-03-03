@@ -31,11 +31,6 @@
             _containerCdn = containerCdn;
         }
 
-        public override int CompareUnique(Node node)
-        {
-            return Label.CompareTo(node.Label);
-        }
-
         protected override async Task<Node[]> CreateChildrenAsync(CancellationToken cancellationToken)
         {
             ContainerObject[] objects = await ListObjectsAsync(cancellationToken);

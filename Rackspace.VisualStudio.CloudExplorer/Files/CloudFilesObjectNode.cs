@@ -32,11 +32,6 @@
             _containerObject = containerObject;
         }
 
-        public override int CompareUnique(Node node)
-        {
-            return Label.CompareTo(node.Label);
-        }
-
         public override bool IsAlwaysLeaf()
         {
             return true;

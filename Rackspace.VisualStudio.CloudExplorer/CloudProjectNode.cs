@@ -146,11 +146,6 @@
             return _children;
         }
 
-        public override int CompareUnique(Node node)
-        {
-            return Label.CompareTo(node.Label);
-        }
-
         public override Image Icon
         {
             get

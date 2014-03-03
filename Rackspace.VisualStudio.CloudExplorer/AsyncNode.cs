@@ -58,6 +58,15 @@
             get;
         }
 
+        public override int CompareUnique(Node node)
+        {
+            int result = string.Compare(Label, node.Label, StringComparison.OrdinalIgnoreCase);
+            if (result != 0)
+                return result;
+
+            return string.Compare(Label, node.Label, StringComparison.Ordinal);
+        }
+
         public override sealed bool CanEditLabel()
         {
             return false;
