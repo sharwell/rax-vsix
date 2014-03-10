@@ -247,6 +247,10 @@
   <ItemGroup />
   <ItemGroup>
     <None Include="Properties\vs2012\source.extension.vsixmanifest" />
+    <Content Include="..\License.txt">
+      <Link>License.txt</Link>
+      <IncludeInVSIX>true</IncludeInVSIX>
+    </Content>
     <Content Include="Resources\cloud-backup-icon.png" />
     <Content Include="Resources\cloud-database-icon.png" />
     <Content Include="Resources\cloud-dns-icon.png" />
