@@ -37,6 +37,10 @@
     <!-- This is added to prevent forced migrations in Visual Studio 2012 and newer -->
     <MinimumVisualStudioVersion>$(VisualStudioVersion)</MinimumVisualStudioVersion>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(VisualStudioVersion)'!='11.0'">
+    <!-- Only deploy the extension if the version of Visual Studio supports it. -->
+    <DeployExtension>false</DeployExtension>
+  </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
