@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Vsix xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" Version="1.0.0" xmlns="http://schemas.microsoft.com/developer/vsx-schema/2010">
-  <Identifier Id="Rackspace.VisualStudio.CloudExplorer.6e521432-5b8b-4568-836e-a9a010a60101">
-    <Name>Rackspace Cloud Explorer</Name>
+  <Identifier Id="Rackspace.VisualStudio.CloudExplorer.7151f3e2-8545-481f-a862-eaa9a0c9f80b">
+    <Name>Rackspace Cloud Explorer for Visual Studio 2013</Name>
     <Author>Sam Harwell</Author>
     <Version>1.0.0</Version>
     <Description xml:space="preserve">Server Explorer support for Rackspace cloud products</Description>
