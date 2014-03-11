@@ -3,11 +3,13 @@
     using System;
     using System.Collections.Generic;
     using System.ComponentModel;
+    using System.Linq;
     using System.Threading;
     using System.Threading.Tasks;
     using System.Windows.Forms;
     using Microsoft.VSDesigner.ServerExplorer;
     using net.openstack.Core.Domain;
+    using net.openstack.Core.Exceptions.Response;
     using net.openstack.Providers.Rackspace;
     using Container = net.openstack.Core.Domain.Container;
     using Image = System.Drawing.Image;
@@ -90,11 +92,31 @@
 
         protected override async Task<bool> DeleteNodeAsync(CancellationToken cancellationToken, System.IProgress<int> progress)
         {
-            await Task.Run(
-                () =>
-                {
-                    _provider.DeleteContainer(_container.Name, deleteObjects: true);
-                });
+            while (true)
+            {
+                IEnumerable<ContainerObject> objects = await Task.Run(() => _provider.ListObjects(_container.Name)).ConfigureAwait(false);
+                if (objects == null)
+                    continue;
+
+                ContainerObject[] objectsArray = objects.ToArray();
+                if (objectsArray.Length == 0)
+                    break;
+
+                Action<Task> continuation =
+                    task =>
+                    {
+                        // ignore ItemNotFoundException
+                        if (task.Exception != null && !(task.Exception.InnerException is ItemNotFoundException))
+                            throw task.Exception;
+                    };
+
+                Task[] deleteObjectTasks = Array.ConvertAll(objectsArray,
+                    obj => Task.Run(() => _provider.DeleteObject(_container.Name, obj.Name))
+                        .ContinueWith(continuation));
+                await Task.WhenAll(deleteObjectTasks).ConfigureAwait(false);
+            }
+
+            await Task.Run(() => _provider.DeleteContainer(_container.Name)).ConfigureAwait(false);
             return true;
         }
 
