@@ -12,6 +12,7 @@
     {
         private volatile Task _updateTask;
         private volatile Task _deleteTask;
+        private string _progress;
         private Node[] _children;
 
         public AsyncNode()
@@ -41,8 +42,15 @@
                 string displayText = DisplayText;
                 if (IsRefreshing)
                     return string.Format("{0} (Refreshing...)", displayText);
+
                 if (IsDeleting)
+                {
+                    string progress = _progress;
+                    if (!string.IsNullOrEmpty(progress))
+                        return string.Format("{0} (Deleting... {1})", displayText, progress);
+
                     return string.Format("{0} (Deleting...)", displayText);
+                }
 
                 return displayText;
             }
@@ -102,7 +110,14 @@
                     Task deleteTask = _deleteTask;
                     if (deleteTask == null)
                     {
-                        Task<bool> nodeDeleteTask = DeleteNodeAsync(CancellationToken.None);
+                        _progress = null;
+                        Action<int> action =
+                            progressValue =>
+                            {
+                                _progress = string.Format("{0}%", progressValue);
+                                TryUpdateLabel();
+                            };
+                        Task<bool> nodeDeleteTask = DeleteNodeAsync(CancellationToken.None, new Progress<int>(action));
                         if (nodeDeleteTask.IsCompleted)
                             return nodeDeleteTask.Result;
                         else
@@ -164,8 +179,9 @@
             if (deleteTask.IsFaulted || deleteTask.IsCanceled)
             {
                 Exception ignored = deleteTask.Exception;
-                _deleteTask = null;
+                _progress = "failed";
                 TryUpdateLabel();
+                _deleteTask = null;
                 return;
             }
 
@@ -185,7 +201,7 @@
 
         protected abstract Task<Node[]> CreateChildrenAsync(CancellationToken cancellationToken);
 
-        protected virtual Task<bool> DeleteNodeAsync(CancellationToken cancellationToken)
+        protected virtual Task<bool> DeleteNodeAsync(CancellationToken cancellationToken, IProgress<int> progress)
         {
             return Task.FromResult(false);
         }

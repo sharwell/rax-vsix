@@ -75,7 +75,7 @@
             return nodeSite.ShowMessageBox(message, MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question);
         }
 
-        protected override Task<bool> DeleteNodeAsync(CancellationToken cancellationToken)
+        protected override Task<bool> DeleteNodeAsync(CancellationToken cancellationToken, System.IProgress<int> progress)
         {
             throw new NotImplementedException();
         }
