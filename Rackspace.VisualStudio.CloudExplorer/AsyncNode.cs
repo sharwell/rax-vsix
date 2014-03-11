@@ -152,8 +152,23 @@
             }
         }
 
+        protected void TryUpdateLabel()
+        {
+            INodeSite nodeSite = GetNodeSite();
+            if (nodeSite != null)
+                nodeSite.UpdateLabel();
+        }
+
         protected void UpdateDisplayAfterDeleted(Task<bool> deleteTask)
         {
+            if (deleteTask.IsFaulted || deleteTask.IsCanceled)
+            {
+                Exception ignored = deleteTask.Exception;
+                _deleteTask = null;
+                TryUpdateLabel();
+                return;
+            }
+
             if (!deleteTask.IsCompleted || !deleteTask.Result)
                 return;
 
