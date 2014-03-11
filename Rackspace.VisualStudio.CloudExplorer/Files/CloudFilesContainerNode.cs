@@ -92,6 +92,24 @@
 
         protected override async Task<bool> DeleteNodeAsync(CancellationToken cancellationToken, System.IProgress<int> progress)
         {
+            // use a default instance of Progress<int> so we don't have to use null checks throughout the method
+            if (progress == null)
+                progress = new Progress<int>();
+
+            // get the current container object count as a second estimate of the number of objects we're deleting.
+            Dictionary<string, string> headers = _provider.GetContainerHeader(_container.Name);
+            string containerObjectCountString = null;
+            int containerObjectCount = 0;
+            if (headers != null && headers.TryGetValue(CloudFilesProvider.ContainerObjectCount, out containerObjectCountString))
+            {
+                if (!int.TryParse(containerObjectCountString, out containerObjectCount))
+                    containerObjectCount = _container.Count;
+            }
+
+            int deletedEstimate = 0;
+            int progressEstimate = 0;
+            progress.Report(0);
+
             while (true)
             {
                 IEnumerable<ContainerObject> objects = await Task.Run(() => _provider.ListObjects(_container.Name)).ConfigureAwait(false);
@@ -102,12 +120,27 @@
                 if (objectsArray.Length == 0)
                     break;
 
+                int totalCount = objectsArray.Length;
+                if (container != null)
+                    totalCount = Math.Max(totalCount, containerObjectCount);
+
+                int count = 0;
                 Action<Task> continuation =
                     task =>
                     {
                         // ignore ItemNotFoundException
                         if (task.Exception != null && !(task.Exception.InnerException is ItemNotFoundException))
                             throw task.Exception;
+
+                        Interlocked.Increment(ref deletedEstimate);
+                        count++;
+                        int updatedProgress = (int)Math.Round((100.0 * deletedEstimate) / totalCount, 0, MidpointRounding.AwayFromZero);
+                        updatedProgress = Math.Max(0, Math.Min(100, updatedProgress));
+                        if (updatedProgress != progressEstimate)
+                        {
+                            progressEstimate = updatedProgress;
+                            progress.Report(updatedProgress);
+                        }
                     };
 
                 Task[] deleteObjectTasks = Array.ConvertAll(objectsArray,
