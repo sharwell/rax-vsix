@@ -33,8 +33,16 @@
 
         protected override async Task<Node[]> CreateChildrenAsync(CancellationToken cancellationToken)
         {
-            ContainerObject[] objects = await ListObjectsAsync(cancellationToken);
-            return Array.ConvertAll(objects, i => CreateObjectNode(i));
+            int limit = 100;
+            ContainerObject[] objects = await ListObjectsAsync(cancellationToken, limit);
+            Node[] nodes = Array.ConvertAll(objects, i => CreateObjectNode(i));
+            if (nodes.Length == limit)
+            {
+                Array.Resize(ref nodes, nodes.Length + 1);
+                nodes[nodes.Length - 1] = new NotImplementedPlaceholderNode();
+            }
+
+            return nodes;
         }
 
         private CloudFilesObjectNode CreateObjectNode(ContainerObject containerObject)
@@ -42,10 +50,10 @@
             return new CloudFilesObjectNode(_provider, _container, containerObject);
         }
 
-        private async Task<ContainerObject[]> ListObjectsAsync(CancellationToken cancellationToken)
+        private async Task<ContainerObject[]> ListObjectsAsync(CancellationToken cancellationToken, int limit)
         {
             List<ContainerObject> objects = new List<ContainerObject>();
-            objects.AddRange(await Task.Run(() => _provider.ListObjects(_container.Name)));
+            objects.AddRange(await Task.Run(() => _provider.ListObjects(_container.Name, limit)));
             return objects.ToArray();
         }
 
