@@ -36,7 +36,9 @@
 
         private CloudFilesProvider CreateProvider()
         {
-            return new CloudFilesProvider(Identity, Endpoint.Region, null, null);
+            CloudFilesProvider provider = new CloudFilesProvider(Identity, Endpoint.Region, null, null);
+            provider.ConnectionLimit = 50;
+            return provider;
         }
     }
 }
