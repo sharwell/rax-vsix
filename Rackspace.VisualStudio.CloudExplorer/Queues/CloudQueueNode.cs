@@ -66,7 +66,7 @@
             return nodeSite.ShowMessageBox(message, MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question);
         }
 
-        protected override async Task<bool> DeleteNodeAsync(CancellationToken cancellationToken)
+        protected override async Task<bool> DeleteNodeAsync(CancellationToken cancellationToken, System.IProgress<int> progress)
         {
             await _provider.DeleteQueueAsync(_queue.Name, cancellationToken);
             return true;
