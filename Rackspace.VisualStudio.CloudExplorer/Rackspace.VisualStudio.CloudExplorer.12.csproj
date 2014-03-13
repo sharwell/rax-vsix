@@ -65,7 +65,10 @@
     <Compile Include="Backup\CloudBackupEndpointNode.cs" />
     <Compile Include="Backup\CloudBackupRootNode.cs" />
     <Compile Include="BlockStorage\CloudBlockStorageEndpointNode.cs" />
+    <Compile Include="BlockStorage\CloudBlockStorageOrphanedSnapshotsNode.cs" />
     <Compile Include="BlockStorage\CloudBlockStorageRootNode.cs" />
+    <Compile Include="BlockStorage\CloudBlockStorageSnapshotNode.cs" />
+    <Compile Include="BlockStorage\CloudBlockStorageVolumeNode.cs" />
     <Compile Include="CloudExplorerPackage.cs" />
     <Compile Include="CloudProductRootNode.cs" />
     <Compile Include="CloudProjectNode.cs" />
