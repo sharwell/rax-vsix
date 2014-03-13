@@ -17,8 +17,10 @@
     {
         private readonly CloudServersProvider _provider;
         private readonly Server _server;
+        private readonly FlavorDetails _flavor;
+        private readonly ServerImage _image;
 
-        public CloudServersServerNode(CloudServersProvider provider, Server server)
+        public CloudServersServerNode(CloudServersProvider provider, Server server, FlavorDetails flavor, ServerImage image)
         {
             if (provider == null)
                 throw new ArgumentNullException("provider");
@@ -27,6 +29,8 @@
 
             this._provider = provider;
             this._server = server;
+            this._flavor = flavor;
+            this._image = image;
         }
 
         protected override string DisplayText
@@ -82,15 +86,17 @@
 
         public override object GetBrowseComponent()
         {
-            return new ServerProperties(_provider, _server);
+            return new ServerProperties(_provider, _server, _flavor, _image);
         }
 
         public class ServerProperties : LocalizableProperties, ICustomTypeDescriptor
         {
             private readonly CloudServersProvider _provider;
             private readonly Server _server;
+            private readonly FlavorDetails _flavor;
+            private readonly ServerImage _image;
 
-            public ServerProperties(CloudServersProvider provider, Server server)
+            public ServerProperties(CloudServersProvider provider, Server server, FlavorDetails flavor, ServerImage image)
             {
                 if (provider == null)
                     throw new ArgumentNullException("provider");
@@ -99,6 +105,8 @@
 
                 _provider = provider;
                 _server = server;
+                _flavor = flavor;
+                _image = image;
             }
 
             [DisplayName("ID")]
@@ -201,6 +209,9 @@
             {
                 get
                 {
+                    if (_flavor != null)
+                        return _flavor.Name ?? _flavor.Id;
+
                     return _server.Flavor != null ? _server.Flavor.Name ?? _server.Flavor.Id : null;
                 }
             }
@@ -219,6 +230,9 @@
             {
                 get
                 {
+                    if (_image != null)
+                        return _image.Name ?? _image.Id;
+
                     return _server.Image != null ? _server.Image.Name ?? _server.Image.Id : null;
                 }
             }
