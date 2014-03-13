@@ -106,6 +106,7 @@
     <Compile Include="ServerExplorerIcons.cs" />
     <Compile Include="Servers\CloudServersEndpointNode.cs" />
     <Compile Include="Servers\CloudServersRootNode.cs" />
+    <Compile Include="Servers\CloudServersServerNode.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\keys\cloudexplorer.snk">
