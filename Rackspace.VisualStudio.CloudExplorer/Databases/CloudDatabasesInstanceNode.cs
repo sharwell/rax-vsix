@@ -1,7 +1,10 @@
 ﻿namespace Rackspace.VisualStudio.CloudExplorer.Databases
 {
     using System;
+    using System.Collections.Generic;
+    using System.Collections.ObjectModel;
     using System.ComponentModel;
+    using System.Linq;
     using System.Threading;
     using System.Threading.Tasks;
     using Microsoft.VSDesigner.ServerExplorer;
@@ -48,12 +51,28 @@
 
         public override bool IsAlwaysLeaf()
         {
-            return true;
+            return false;
         }
 
-        protected override Task<Node[]> CreateChildrenAsync(CancellationToken cancellationToken)
+        protected override async Task<Node[]> CreateChildrenAsync(CancellationToken cancellationToken)
         {
-            return Task.FromResult(RackspaceProductsNode.EmptyChildren);
+            Database[] databases = await ListDatabasesAsync(cancellationToken).ConfigureAwait(false);
+            List<Node> results = new List<Node>();
+            foreach (Database database in databases)
+                results.Add(await CreateDatabaseNodeAsync(database, cancellationToken).ConfigureAwait(false));
+
+            return results.ToArray();
+        }
+
+        private Task<Node> CreateDatabaseNodeAsync(Database database, CancellationToken cancellationToken)
+        {
+            return Task.FromResult<Node>(new CloudDatabasesDatabaseNode(_provider, _instance, database));
+        }
+
+        private async Task<Database[]> ListDatabasesAsync(CancellationToken cancellationToken)
+        {
+            ReadOnlyCollection<Database> databases = await _provider.ListDatabasesAsync(_instance.Id, null, null, cancellationToken).ConfigureAwait(false);
+            return databases.ToArray();
         }
 
         public override bool CanDeleteNode()
@@ -188,6 +207,16 @@
 
                     return _instance.VolumeConfiguration.Used;
                 }
+            }
+
+            public override string GetClassName()
+            {
+                return "Database Instance Properties";
+            }
+
+            string ICustomTypeDescriptor.GetComponentName()
+            {
+                return "Cloud Databases";
             }
         }
     }
