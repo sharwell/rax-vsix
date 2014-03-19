@@ -117,7 +117,10 @@
             {
                 get
                 {
-                    return _domain.AccountId;
+                    if (_domain.AccountId == null)
+                        return null;
+
+                    return _domain.AccountId.Value;
                 }
             }
 
