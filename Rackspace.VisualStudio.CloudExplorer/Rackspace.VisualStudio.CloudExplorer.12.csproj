@@ -62,6 +62,7 @@
     <Compile Include="AsyncNode.cs" />
     <Compile Include="Autoscale\CloudAutoscaleEndpointNode.cs" />
     <Compile Include="Autoscale\CloudAutoscaleRootNode.cs" />
+    <Compile Include="Autoscale\CloudAutoscaleScalingGroupNode.cs" />
     <Compile Include="Backup\CloudBackupEndpointNode.cs" />
     <Compile Include="Backup\CloudBackupRootNode.cs" />
     <Compile Include="BlockStorage\CloudBlockStorageEndpointNode.cs" />
