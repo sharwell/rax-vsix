@@ -29,7 +29,7 @@
         private async Task<Node> CreateScalingGroupNodeAsync(CloudAutoScaleProvider provider, ScalingGroup scalingGroup, CancellationToken cancellationToken)
         {
             if (scalingGroup.GroupConfiguration == null || scalingGroup.LaunchConfiguration == null)
-                scalingGroup = await provider.GetGroupAsync(scalingGroup.Id, cancellationToken);
+                scalingGroup = await provider.GetGroupAsync(scalingGroup.Id, cancellationToken).ConfigureAwait(false);
 
             return new CloudAutoscaleScalingGroupNode(provider, scalingGroup);
         }

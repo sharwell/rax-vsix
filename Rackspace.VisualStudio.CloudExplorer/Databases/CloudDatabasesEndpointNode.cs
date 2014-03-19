@@ -18,7 +18,7 @@
 
         protected override async Task<Node[]> CreateChildrenAsync(CancellationToken cancellationToken)
         {
-            Tuple<CloudDatabasesProvider, DatabaseInstance[]> databaseInstances = await ListDatabaseInstancesAsync(cancellationToken);
+            Tuple<CloudDatabasesProvider, DatabaseInstance[]> databaseInstances = await ListDatabaseInstancesAsync(cancellationToken).ConfigureAwait(false);
             List<Node> results = new List<Node>();
             foreach (DatabaseInstance instance in databaseInstances.Item2)
                 results.Add(await CreateDatabaseInstanceNodeAsync(databaseInstances.Item1, instance, cancellationToken).ConfigureAwait(false));
@@ -40,7 +40,7 @@
             for (int i = 0; i < instances.Count; i++)
             {
                 if (instances[i].HostName == null)
-                    instances[i] = await provider.GetDatabaseInstanceAsync(instances[i].Id, cancellationToken);
+                    instances[i] = await provider.GetDatabaseInstanceAsync(instances[i].Id, cancellationToken).ConfigureAwait(false);
             }
 
             return Tuple.Create(provider, instances.ToArray());
