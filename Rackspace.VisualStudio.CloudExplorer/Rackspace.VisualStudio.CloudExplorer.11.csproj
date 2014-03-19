@@ -76,6 +76,7 @@
     <Compile Include="Credentials\AddCredentials.xaml.cs">
       <DependentUpon>AddCredentials.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Databases\CloudDatabasesDatabaseNode.cs" />
     <Compile Include="Databases\CloudDatabasesEndpointNode.cs" />
     <Compile Include="Databases\CloudDatabasesInstanceNode.cs" />
     <Compile Include="Databases\CloudDatabasesRootNode.cs" />
