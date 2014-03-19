@@ -124,6 +124,16 @@
                     return _provider.DefaultRegion;
                 }
             }
+
+            public override string GetClassName()
+            {
+                return "Database Properties";
+            }
+
+            string ICustomTypeDescriptor.GetComponentName()
+            {
+                return "Cloud Databases";
+            }
         }
     }
 }

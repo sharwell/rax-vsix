@@ -208,6 +208,16 @@
                     return _instance.VolumeConfiguration.Used;
                 }
             }
+
+            public override string GetClassName()
+            {
+                return "Database Instance Properties";
+            }
+
+            string ICustomTypeDescriptor.GetComponentName()
+            {
+                return "Cloud Databases";
+            }
         }
     }
 }

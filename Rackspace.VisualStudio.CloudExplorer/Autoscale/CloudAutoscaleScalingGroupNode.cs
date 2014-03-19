@@ -237,6 +237,16 @@
                     return _scalingGroup.LaunchConfiguration.LaunchType;
                 }
             }
+
+            public override string GetClassName()
+            {
+                return "Scaling Group Properties";
+            }
+
+            string ICustomTypeDescriptor.GetComponentName()
+            {
+                return "Cloud Auto Scale";
+            }
         }
     }
 }
