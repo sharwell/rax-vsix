@@ -8,5 +8,7 @@
         public const string AutoScaleState = "State";
         public const string AutoScaleGroupConfiguration = "Group Configuration";
         public const string AutoScaleLaunchConfiguration = "Launch Configuration";
+
+        public const string DatabaseVolumeConfiguration = "Volume Configuration";
     }
 }
