@@ -47,12 +47,12 @@
 
         public override bool IsAlwaysLeaf()
         {
-            return true;
+            return false;
         }
 
         protected override Task<Node[]> CreateChildrenAsync(CancellationToken cancellationToken)
         {
-            return Task.FromResult(RackspaceProductsNode.EmptyChildren);
+            return Task.FromResult(new Node[] { new CloudAutoscalePoliciesRootNode(_provider, _scalingGroup) });
         }
 
         public override bool CanDeleteNode()
