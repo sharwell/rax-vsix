@@ -55,7 +55,7 @@
         {
             get
             {
-                return ServerExplorerIcons.PrivateCloud;
+                return ServerExplorerIcons.Region;
             }
         }
 

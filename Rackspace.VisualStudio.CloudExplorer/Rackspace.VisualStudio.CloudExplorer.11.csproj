@@ -266,14 +266,24 @@
       <Link>License.txt</Link>
       <IncludeInVSIX>true</IncludeInVSIX>
     </Content>
+    <Content Include="Resources\block-storage-volume-icon.png" />
+    <Content Include="Resources\cloud-autoscale-icon.png" />
     <Content Include="Resources\cloud-backup-icon.png" />
+    <Content Include="Resources\cloud-block-storage-icon.png" />
     <Content Include="Resources\cloud-database-icon.png" />
     <Content Include="Resources\cloud-dns-icon.png" />
+    <Content Include="Resources\cloud-files-container-icon.png" />
     <Content Include="Resources\cloud-files-icon.png" />
+    <Content Include="Resources\cloud-icon.png" />
     <Content Include="Resources\cloud-load-balancers-icon.png" />
     <Content Include="Resources\cloud-monitoring-icon.png" />
+    <Content Include="Resources\cloud-networks-icon.png" />
+    <Content Include="Resources\cloud-orchestration-icon.png" />
+    <Content Include="Resources\cloud-queues-icon.png" />
+    <Content Include="Resources\cloud-server-icon.png" />
     <Content Include="Resources\cloud-servers-icon.png" />
     <Content Include="Resources\private-cloud-icon.png" />
+    <Content Include="Resources\region-icon.png" />
   </ItemGroup>
   <ItemGroup>
     <Page Include="Credentials\AddCredentials.xaml">

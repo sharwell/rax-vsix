@@ -34,8 +34,6 @@
                 return null;
             }, true);
 
-        private readonly Lazy<Image> _icon = new Lazy<Image>(() => Resources.CloudDatabaseIcon);
-
         public RackspaceProductsNode()
         {
             if (EmptyIcon == null)
@@ -60,7 +58,7 @@
         {
             get
             {
-                return _icon.Value;
+                return ServerExplorerIcons.Cloud;
             }
         }
 

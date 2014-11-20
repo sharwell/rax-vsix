@@ -37,7 +37,7 @@
         {
             get
             {
-                return ServerExplorerIcons.CloudLoadBalancers;
+                return ServerExplorerIcons.CloudAutoscale;
             }
         }
 

@@ -37,7 +37,7 @@
         {
             get
             {
-                return ServerExplorerIcons.CloudDatabases;
+                return ServerExplorerIcons.CloudQueues;
             }
         }
 

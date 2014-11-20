@@ -37,7 +37,7 @@
         {
             get
             {
-                return ServerExplorerIcons.CloudFiles;
+                return ServerExplorerIcons.CloudBlockStorage;
             }
         }
 
