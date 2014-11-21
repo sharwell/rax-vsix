@@ -5,6 +5,7 @@
 # User-specific Visual Studio files
 *.user
 *.suo
+*.sln.ide/
 
 # Restored by NuGet during the build
 /packages/
