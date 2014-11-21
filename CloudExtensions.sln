@@ -11,6 +11,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rackspace.VisualStudio.Clou
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rackspace.VisualStudio.CloudExplorer.12", "Rackspace.VisualStudio.CloudExplorer\Rackspace.VisualStudio.CloudExplorer.12.csproj", "{92ED20CB-D8E1-4C5C-BA48-9663B6AD0C6E}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rackspace.VisualStudio.CloudExplorer.14", "Rackspace.VisualStudio.CloudExplorer\Rackspace.VisualStudio.CloudExplorer.14.csproj", "{756C407E-0F27-4A37-8B51-8A802AB4EBFF}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -25,6 +27,10 @@ Global
 		{92ED20CB-D8E1-4C5C-BA48-9663B6AD0C6E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{92ED20CB-D8E1-4C5C-BA48-9663B6AD0C6E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{92ED20CB-D8E1-4C5C-BA48-9663B6AD0C6E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{756C407E-0F27-4A37-8B51-8A802AB4EBFF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{756C407E-0F27-4A37-8B51-8A802AB4EBFF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{756C407E-0F27-4A37-8B51-8A802AB4EBFF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{756C407E-0F27-4A37-8B51-8A802AB4EBFF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
