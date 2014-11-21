@@ -1,0 +1,20 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<PackageManifest Version="2.0.0" xmlns="http://schemas.microsoft.com/developer/vsx-schema/2011" xmlns:d="http://schemas.microsoft.com/developer/vsx-schema-design/2011">
+  <Metadata>
+    <Identity Id="Rackspace.VisualStudio.CloudExplorer.40e828b7-957c-42a1-8f96-e422e3543014" Language="en-US" Publisher="Sam Harwell" Version="1.0.0"/>
+    <DisplayName>Rackspace Cloud Explorer for Visual Studio 2015</DisplayName>
+    <Description>Server Explorer support for Rackspace cloud products</Description>
+    <MoreInfo>https://github.com/rackerlabs/rax-vsix</MoreInfo>
+    <License>License.txt</License>
+  </Metadata>
+  <Installation>
+    <InstallationTarget Id="Microsoft.VisualStudio.Pro" Version="[14.0,15.0)" />
+  </Installation>
+  <Dependencies>
+    <Dependency Version="[14.0,15.0)" d:Source="Installed" Id="Microsoft.VisualStudio.MPF" DisplayName="Visual Studio MPF" />
+  </Dependencies>
+  <Assets>
+    <Asset Type="Microsoft.VisualStudio.MefComponent" d:Source="Project" d:ProjectName="%CurrentProject%" Path="|%CurrentProject%|" />
+    <Asset Type="Microsoft.VisualStudio.VsPackage" d:Source="Project" d:ProjectName="%CurrentProject%" Path="|%CurrentProject%;PkgdefProjectOutputGroup|" />
+  </Assets>
+</PackageManifest>
