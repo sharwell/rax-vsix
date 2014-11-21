@@ -63,7 +63,7 @@
         {
             get
             {
-                return RackspaceProductsNode.EmptyIcon;
+                return ServerExplorerIcons.CloudFilesContainer;
             }
         }
 
