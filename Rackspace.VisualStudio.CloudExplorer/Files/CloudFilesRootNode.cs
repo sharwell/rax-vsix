@@ -5,18 +5,16 @@
     using System.Threading;
     using System.Threading.Tasks;
     using Microsoft.VSDesigner.ServerExplorer;
-    using net.openstack.Core.Domain;
+    using OpenStack.Security.Authentication;
+    using OpenStack.Services.Identity.V2;
 
-    public class CloudFilesRootNode : CloudProductRootNode
+    public class CloudFilesRootNode : CloudProductRootNodeV2
     {
-        private readonly CloudIdentity _identity;
-
         private Node[] _children;
 
-        public CloudFilesRootNode(ServiceCatalog serviceCatalog, CloudIdentity identity)
-            : base(serviceCatalog)
+        public CloudFilesRootNode(IAuthenticationService authenticationService, ServiceCatalogEntry serviceCatalogEntry)
+            : base(authenticationService, serviceCatalogEntry)
         {
-            _identity = identity;
         }
 
         protected override Task<Node[]> CreateChildrenAsync(CancellationToken cancellationToken)
@@ -24,8 +22,8 @@
             if (_children == null)
             {
                 List<Node> nodes = new List<Node>();
-                foreach (Endpoint endpoint in ServiceCatalog.Endpoints)
-                    nodes.Add(new CloudFilesEndpointNode(_identity, ServiceCatalog, endpoint));
+                foreach (Endpoint endpoint in ServiceCatalogEntry.Endpoints)
+                    nodes.Add(new CloudFilesEndpointNode(AuthenticationService, ServiceCatalogEntry, endpoint));
 
                 _children = nodes.ToArray();
             }

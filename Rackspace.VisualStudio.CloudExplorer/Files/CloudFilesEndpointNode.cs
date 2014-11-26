@@ -5,40 +5,43 @@
     using System.Threading;
     using System.Threading.Tasks;
     using Microsoft.VSDesigner.ServerExplorer;
-    using net.openstack.Core.Domain;
-    using net.openstack.Providers.Rackspace;
+    using OpenStack.Collections;
+    using OpenStack.Security.Authentication;
+    using OpenStack.Services.Identity.V2;
+    using OpenStack.Services.ObjectStorage.V1;
 
-    public class CloudFilesEndpointNode : EndpointNode
+    public class CloudFilesEndpointNode : EndpointNodeV2
     {
-        public CloudFilesEndpointNode(CloudIdentity identity, ServiceCatalog serviceCatalog, Endpoint endpoint)
-            : base(identity, serviceCatalog, endpoint)
+        public CloudFilesEndpointNode(IAuthenticationService authenticationService, ServiceCatalogEntry serviceCatalogEntry, Endpoint endpoint)
+            : base(authenticationService, serviceCatalogEntry, endpoint)
         {
         }
 
         protected override async Task<Node[]> CreateChildrenAsync(CancellationToken cancellationToken)
         {
-            Tuple<CloudFilesProvider, Container[]> containers = await ListContainersAsync(cancellationToken);
-            return Array.ConvertAll(containers.Item2, i => CreateContainerNode(containers.Item1, i, null));
+            Tuple<IObjectStorageService, Container[]> containers = await ListContainersAsync(cancellationToken);
+            return Array.ConvertAll(containers.Item2, i => CreateContainerNode(containers.Item1, i));
         }
 
-        private CloudFilesContainerNode CreateContainerNode(CloudFilesProvider provider, Container container, ContainerCDN containerCdn)
+        private CloudFilesContainerNode CreateContainerNode(IObjectStorageService provider, Container container)
         {
-            return new CloudFilesContainerNode(provider, container, containerCdn);
+            return new CloudFilesContainerNode(provider, container);
         }
 
-        private async Task<Tuple<CloudFilesProvider, Container[]>> ListContainersAsync(CancellationToken cancellationToken)
+        private async Task<Tuple<IObjectStorageService, Container[]>> ListContainersAsync(CancellationToken cancellationToken)
         {
-            CloudFilesProvider provider = CreateProvider();
+            IObjectStorageService provider = CreateServiceClient();
             List<Container> containers = new List<Container>();
-            containers.AddRange(await Task.Run(() => provider.ListContainers()));
+            Tuple<AccountMetadata, ReadOnlyCollectionPage<Container>> containersResult = await provider.ListContainersAsync(cancellationToken).ConfigureAwait(false);
+            containers.AddRange(containersResult.Item2);
             return Tuple.Create(provider, containers.ToArray());
         }
 
-        private CloudFilesProvider CreateProvider()
+        private IObjectStorageService CreateServiceClient()
         {
-            CloudFilesProvider provider = new CloudFilesProvider(Identity, Endpoint.Region, null, null);
-            provider.ConnectionLimit = 50;
-            return provider;
+            ObjectStorageClient client = new ObjectStorageClient(AuthenticationService, Endpoint.Region, false);
+            client.ConnectionLimit = 50;
+            return client;
         }
     }
 }

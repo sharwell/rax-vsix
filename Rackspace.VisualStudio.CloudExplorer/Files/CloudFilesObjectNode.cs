@@ -6,19 +6,18 @@
     using System.Threading.Tasks;
     using System.Windows.Forms;
     using Microsoft.VSDesigner.ServerExplorer;
-    using net.openstack.Core.Domain;
-    using net.openstack.Providers.Rackspace;
-    using Container = net.openstack.Core.Domain.Container;
+    using OpenStack.Services.ObjectStorage.V1;
+    using Container = OpenStack.Services.ObjectStorage.V1.Container;
     using Image = System.Drawing.Image;
     using LocalizableProperties = Microsoft.VisualStudio.Shell.LocalizableProperties;
 
     public class CloudFilesObjectNode : AsyncNode
     {
-        private readonly CloudFilesProvider _provider;
+        private readonly IObjectStorageService _provider;
         private readonly Container _container;
         private readonly ContainerObject _containerObject;
 
-        public CloudFilesObjectNode(CloudFilesProvider provider, Container container, ContainerObject containerObject)
+        public CloudFilesObjectNode(IObjectStorageService provider, Container container, ContainerObject containerObject)
         {
             if (provider == null)
                 throw new ArgumentNullException("provider");
@@ -54,7 +53,7 @@
         {
             get
             {
-                return _containerObject.Name;
+                return _containerObject.Name.Value;
             }
         }
 
@@ -75,11 +74,7 @@
 
         protected override async Task<bool> DeleteNodeAsync(CancellationToken cancellationToken, System.IProgress<int> progress)
         {
-            await Task.Run(
-                () =>
-                {
-                    _provider.DeleteObject(_container.Name, _containerObject.Name);
-                });
+            await _provider.RemoveObjectAsync(_container.Name, _containerObject.Name, cancellationToken);
             return true;
         }
 
@@ -90,11 +85,11 @@
 
         public class ObjectProperties : LocalizableProperties, ICustomTypeDescriptor
         {
-            private readonly CloudFilesProvider _provider;
+            private readonly IObjectStorageService _provider;
             private readonly Container _container;
             private readonly ContainerObject _containerObject;
 
-            public ObjectProperties(CloudFilesProvider provider, Container container, ContainerObject containerObject)
+            public ObjectProperties(IObjectStorageService provider, Container container, ContainerObject containerObject)
             {
                 if (provider == null)
                     throw new ArgumentNullException("provider");
@@ -114,10 +109,11 @@
             {
                 get
                 {
-                    return _containerObject.Name;
+                    return _containerObject.Name.Value;
                 }
             }
 
+#if false
             [DisplayName("Region")]
             [Category(PropertyCategories.Identity)]
             public string Region
@@ -127,6 +123,7 @@
                     return _provider.DefaultRegion;
                 }
             }
+#endif
 
             [DisplayName("ETag")]
             [Category(PropertyCategories.Identity)]
@@ -139,11 +136,11 @@
             }
 
             [DisplayName("Size")]
-            public long Size
+            public long? Size
             {
                 get
                 {
-                    return _containerObject.Bytes;
+                    return _containerObject.Size;
                 }
             }
 
@@ -157,7 +154,7 @@
             }
 
             [DisplayName("Last Modified")]
-            public DateTimeOffset LastModified
+            public DateTimeOffset? LastModified
             {
                 get
                 {

@@ -75,6 +75,7 @@
     <Compile Include="BlockStorage\CloudBlockStorageVolumeNode.cs" />
     <Compile Include="CloudExplorerPackage.cs" />
     <Compile Include="CloudProductRootNode.cs" />
+    <Compile Include="CloudProductRootNodeV2.cs" />
     <Compile Include="CloudProjectNode.cs" />
     <Compile Include="Credentials\AddCredentials.xaml.cs">
       <DependentUpon>AddCredentials.xaml</DependentUpon>
@@ -87,6 +88,7 @@
     <Compile Include="Dns\CloudDnsRootNode.cs" />
     <Compile Include="Dns\CloudDomainNode.cs" />
     <Compile Include="EndpointNode.cs" />
+    <Compile Include="EndpointNodeV2.cs" />
     <Compile Include="Files\CloudFilesContainerNode.cs" />
     <Compile Include="Files\CloudFilesEndpointNode.cs" />
     <Compile Include="Files\CloudFilesObjectNode.cs" />

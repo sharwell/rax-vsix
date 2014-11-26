@@ -9,6 +9,9 @@
     using Microsoft.VSDesigner.ServerExplorer;
     using net.openstack.Core.Domain;
     using net.openstack.Providers.Rackspace;
+    using OpenStack.Services.Identity.V2;
+    using Rackspace.Security.Authentication;
+    using Rackspace.Services.Identity.V2;
     using Rackspace.VisualStudio.CloudExplorer.Autoscale;
     using Rackspace.VisualStudio.CloudExplorer.Backup;
     using Rackspace.VisualStudio.CloudExplorer.BlockStorage;
@@ -19,16 +22,23 @@
     using Rackspace.VisualStudio.CloudExplorer.Monitoring;
     using Rackspace.VisualStudio.CloudExplorer.Queues;
     using Rackspace.VisualStudio.CloudExplorer.Servers;
+    using Access = OpenStack.Services.Identity.V2.Access;
     using DialogResult = System.Windows.Forms.DialogResult;
+    using IAuthenticationService = OpenStack.Security.Authentication.IAuthenticationService;
+    using IIdentityService = OpenStack.Services.Identity.V2.IIdentityService;
     using Image = System.Drawing.Image;
     using MessageBoxButtons = System.Windows.Forms.MessageBoxButtons;
     using MessageBoxIcon = System.Windows.Forms.MessageBoxIcon;
+    using ServiceCatalogEntry = OpenStack.Services.Identity.V2.ServiceCatalogEntry;
 
     public class CloudProjectNode : AsyncNode
     {
         private readonly CloudIdentity _identity;
         private readonly CloudIdentityProvider _provider;
         private string _tenantId;
+
+        private readonly IIdentityService _identityService;
+        private readonly IAuthenticationService _authenticationService;
 
         private Node[] _children;
 
@@ -45,6 +55,9 @@
                     if (nodeSite != null)
                         nodeSite.UpdateLabel();
                 });
+
+            _identityService = new RackspaceIdentityClient(new Uri("https://identity.api.rackspacecloud.com/"));
+            _authenticationService = new RackspaceAuthenticationService(_identityService, RackspaceAuthentication.ApiKey(identity.Username, identity.APIKey));
         }
 
         protected override string DisplayText
@@ -99,10 +112,6 @@
 
                         break;
 
-                    case "object-store":
-                        nodes.Add(new CloudFilesRootNode(serviceCatalog, _identity));
-                        break;
-
                     case "volume":
                         nodes.Add(new CloudBlockStorageRootNode(serviceCatalog, _identity));
                         break;
@@ -133,6 +142,21 @@
 
                     case "rax:queues":
                         nodes.Add(new CloudQueuesRootNode(serviceCatalog, _identity));
+                        break;
+
+                    default:
+                        break;
+                    }
+                }
+
+                AuthenticationRequest request = RackspaceAuthentication.ApiKey(_identity.Username, _identity.APIKey);
+                Access access = await _identityService.AuthenticateAsync(request, cancellationToken).ConfigureAwait(false);
+                foreach (ServiceCatalogEntry serviceCatalogEntry in access.ServiceCatalog)
+                {
+                    switch (serviceCatalogEntry.Type)
+                    {
+                    case "object-store":
+                        nodes.Add(new CloudFilesRootNode(_authenticationService, serviceCatalogEntry));
                         break;
 
                     default:
