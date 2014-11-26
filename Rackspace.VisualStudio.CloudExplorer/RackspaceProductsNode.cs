@@ -1,14 +1,18 @@
 ﻿namespace Rackspace.VisualStudio.CloudExplorer
 {
     using System;
+    using System.Collections.Generic;
     using System.Drawing;
+    using System.Linq;
     using System.Runtime.Serialization;
     using System.Threading;
     using System.Threading.Tasks;
+    using System.Windows;
     using Microsoft.VSDesigner.ServerExplorer;
     using net.openstack.Core.Domain;
     using Newtonsoft.Json;
     using Newtonsoft.Json.Linq;
+    using Rackspace.VisualStudio.CloudExplorer.AccountManager;
     using File = System.IO.File;
 
     [Serializable]
@@ -95,6 +99,22 @@
 
         public void GetObjectData(SerializationInfo info, StreamingContext context)
         {
+        }
+
+        public override ContextMenuItem[] GetContextMenuItems()
+        {
+            ContextMenuItem[] contextMenuItems = base.GetContextMenuItems();
+            List<ContextMenuItem> items = contextMenuItems != null ? contextMenuItems.ToList() : new List<ContextMenuItem>();
+            items.Insert(0, new ContextMenuItem("&Manage subscriptions...", HandleManageSubscriptions));
+            return items.ToArray();
+        }
+
+        private void HandleManageSubscriptions(object sender, EventArgs e)
+        {
+            ManageSubscriptionsWindow window = new ManageSubscriptionsWindow();
+            window.Owner = Application.Current.MainWindow;
+            window.WindowStartupLocation = WindowStartupLocation.CenterOwner;
+            window.ShowDialog();
         }
     }
 }

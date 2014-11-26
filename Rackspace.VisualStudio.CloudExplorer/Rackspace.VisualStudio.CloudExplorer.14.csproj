@@ -59,6 +59,14 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="AccountManager\AddAccountWindow.xaml.cs">
+      <DependentUpon>AddAccountWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="AccountManager\CustomWindowProperties.cs" />
+    <Compile Include="AccountManager\ManageSubscriptionsWindow.xaml.cs">
+      <DependentUpon>ManageSubscriptionsWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="AccountManager\WindowExtensions.cs" />
     <Compile Include="AsyncNode.cs" />
     <Compile Include="Autoscale\CloudAutoscaleEndpointNode.cs" />
     <Compile Include="Autoscale\CloudAutoscalePoliciesRootNode.cs" />
@@ -263,6 +271,14 @@
     <Content Include="Resources\region-icon.png" />
   </ItemGroup>
   <ItemGroup>
+    <Page Include="AccountManager\AddAccountWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="AccountManager\ManageSubscriptionsWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Credentials\AddCredentials.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
