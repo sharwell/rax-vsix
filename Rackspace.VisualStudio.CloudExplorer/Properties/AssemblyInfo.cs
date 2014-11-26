@@ -1,6 +1,6 @@
 ﻿using System.Reflection;
-using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
+using Microsoft.VisualStudio.Shell;
 
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
@@ -13,6 +13,14 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyCopyright("Copyright © Sam Harwell 2013")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
+
+[assembly: ProvideBindingRedirection(
+    AssemblyName = "Newtonsoft.Json",
+    OldVersionLowerBound = "4.5.0.0",
+    OldVersionUpperBound = "6.0.0.0",
+    NewVersion = "6.0.0.0",
+    Culture = "neutral",
+    PublicKeyToken = "30ad4fe6b2a6aeed")]
 
 // Setting ComVisible to false makes the types in this assembly not visible 
 // to COM components.  If you need to access a type in this assembly from 
