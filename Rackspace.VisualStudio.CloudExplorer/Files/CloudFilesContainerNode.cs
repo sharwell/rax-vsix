@@ -35,16 +35,26 @@
 
         protected override async Task<Node[]> CreateChildrenAsync(CancellationToken cancellationToken)
         {
-            int limit = 100;
-            ContainerObject[] objects = await ListObjectsAsync(cancellationToken, limit);
-            Node[] nodes = Array.ConvertAll(objects, i => CreateObjectNode(i));
-            if (nodes.Length == limit)
+            try
             {
-                Array.Resize(ref nodes, nodes.Length + 1);
-                nodes[nodes.Length - 1] = new NotImplementedPlaceholderNode();
-            }
+                int limit = 100;
+                ContainerObject[] objects = await ListObjectsAsync(cancellationToken, limit);
+                Node[] nodes = Array.ConvertAll(objects, i => CreateObjectNode(i));
+                if (nodes.Length == limit)
+                {
+                    Array.Resize(ref nodes, nodes.Length + 1);
+                    nodes[nodes.Length - 1] = new NotImplementedPlaceholderNode();
+                }
 
-            return nodes;
+                return nodes;
+            }
+            catch (HttpWebException ex)
+            {
+                if (ex.ResponseMessage == null || ex.ResponseMessage.StatusCode != HttpStatusCode.NotFound)
+                    throw;
+
+                return new[] { new DeletedContainerPlaceholderNode() };
+            }
         }
 
         private CloudFilesObjectNode CreateObjectNode(ContainerObject containerObject)
