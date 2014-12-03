@@ -7,17 +7,32 @@
         mc:Ignorable="d"
         Title="Manage OpenStack Subscriptions" Height="435" Width="491" ShowInTaskbar="False"
         local:CustomWindowProperties.CanMinimize="false" local:CustomWindowProperties.CanMaximize="false">
+    <Window.Resources>
+        <DataTemplate x:Key="AccountItemTemplate">
+            <StackPanel Orientation="Horizontal">
+                <CheckBox VerticalAlignment="Center"/>
+                <Label Content="Account Name"/>
+            </StackPanel>
+        </DataTemplate>
+        <DataTemplate x:Key="RegionItemTemplate">
+            <StackPanel Orientation="Horizontal">
+                <CheckBox VerticalAlignment="Center"/>
+                <Label Content="{Binding Name}"/>
+            </StackPanel>
+        </DataTemplate>
+    </Window.Resources>
     <Grid>
         <TabControl x:Name="tabControl" Margin="10,41,10,37">
             <TabItem Header="Accounts">
                 <Grid Background="#FFE5E5E5">
                     <Label x:Name="label1" Content="The following accounts will be used to access your OpenStack resources:" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top"/>
-                    <ListView x:Name="listView" Margin="10,41,10,36">
-                        <ListView.View>
-                            <GridView>
-                                <GridViewColumn/>
-                            </GridView>
-                        </ListView.View>
+                    <ListView x:Name="listView" Margin="10,41,10,36" ItemTemplate="{StaticResource AccountItemTemplate}">
+                        <ListView.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <StackPanel/>
+                            </ItemsPanelTemplate>
+                        </ListView.ItemsPanel>
+                        <local:AccountViewModel/>
                     </ListView>
                     <Label x:Name="label2" HorizontalAlignment="Left" Margin="10,259,0,0" VerticalAlignment="Top">
                         <Hyperlink Click="Hyperlink_Click" TextDecorations="{x:Null}">Add an account...</Hyperlink>
@@ -30,9 +45,29 @@
                     <ListView x:Name="listView2" Margin="10,41,10,10">
                         <ListView.View>
                             <GridView>
-                                <GridViewColumn/>
+                                <GridViewColumn Header="Region" CellTemplate="{StaticResource RegionItemTemplate}">
+                                    <GridViewColumn.HeaderTemplate>
+                                        <DataTemplate>
+                                            <StackPanel Orientation="Horizontal">
+                                                <CheckBox VerticalAlignment="Center"/>
+                                                <Label Content="Regions"/>
+                                            </StackPanel>
+                                        </DataTemplate>
+                                    </GridViewColumn.HeaderTemplate>
+                                    <GridViewColumn.HeaderContainerStyle>
+                                        <Style TargetType="GridViewColumnHeader">
+                                            <Setter Property="HorizontalContentAlignment" Value="Left"/>
+                                        </Style>
+                                    </GridViewColumn.HeaderContainerStyle>
+                                </GridViewColumn>
                             </GridView>
                         </ListView.View>
+                        <local:RegionViewModel Name="Dallas (DFW)"/>
+                        <local:RegionViewModel Name="Hong Kong (HKG)"/>
+                        <local:RegionViewModel Name="Northern Virginia (IAD)"/>
+                        <local:RegionViewModel Name="Chicago (ORD)"/>
+                        <local:RegionViewModel Name="Sydney (SYD)"/>
+                        <local:RegionViewModel Name="Global"/>
                     </ListView>
                 </Grid>
             </TabItem>
