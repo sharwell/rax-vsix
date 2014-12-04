@@ -8,12 +8,10 @@
     using System.Threading;
     using System.Threading.Tasks;
     using System.Windows;
+    using Microsoft.VisualStudio.ComponentModelHost;
     using Microsoft.VSDesigner.ServerExplorer;
     using net.openstack.Core.Domain;
-    using Newtonsoft.Json;
-    using Newtonsoft.Json.Linq;
     using Rackspace.VisualStudio.CloudExplorer.AccountManager;
-    using File = System.IO.File;
 
     [Serializable]
     public class RackspaceProductsNode : AsyncNode, ISerializable, IChildrenNotSerializable
@@ -29,15 +27,6 @@
         internal static Image EmptyIcon;
         internal static Node[] EmptyChildren = new Node[0];
 
-        private static Lazy<JObject> _developerSettings = new Lazy<JObject>(
-            () =>
-            {
-                if (File.Exists(@"C:\.openstack_net"))
-                    return JObject.Parse(File.ReadAllText(@"C:\.openstack_net"));
-
-                return null;
-            }, true);
-
         public RackspaceProductsNode()
         {
             if (EmptyIcon == null)
@@ -48,14 +37,6 @@
         {
             if (EmptyIcon == null)
                 EmptyIcon = new Bitmap(16, 16);
-        }
-
-        public static JObject DeveloperSettings
-        {
-            get
-            {
-                return _developerSettings.Value;
-            }
         }
 
         public override Image Icon
@@ -74,27 +55,21 @@
             }
         }
 
+        internal AccountStore GetAccountStore()
+        {
+            IComponentModel componentModel = (IComponentModel)GetNodeSite().GetService(typeof(SComponentModel));
+            return componentModel.DefaultExportProvider.GetExportedValue<AccountStore>();
+        }
+
         protected override Task<Node[]> CreateChildrenAsync(CancellationToken cancellationToken)
         {
-            JObject developerSettings = DeveloperSettings;
-            if (developerSettings == null)
-                return Task.FromResult(RackspaceProductsNode.EmptyChildren);
-
-            JObject testIdentity = developerSettings["TestIdentity"] as JObject;
-            if (testIdentity == null)
-                return Task.FromResult(RackspaceProductsNode.EmptyChildren);
-
-            try
+            List<Node> rootNodes = new List<Node>();
+            foreach (CloudIdentity identity in GetAccountStore().Credentials)
             {
-                CloudIdentity identity = testIdentity.ToObject<CloudIdentity>();
-                if (!string.IsNullOrEmpty(identity.Username))
-                    return Task.FromResult(new Node[] { new CloudProjectNode(identity) });
-            }
-            catch (JsonSerializationException)
-            {
+                rootNodes.Add(new CloudProjectNode(identity));
             }
 
-            return Task.FromResult(RackspaceProductsNode.EmptyChildren);
+            return Task.FromResult(rootNodes.ToArray());
         }
 
         public void GetObjectData(SerializationInfo info, StreamingContext context)
@@ -111,7 +86,7 @@
 
         private void HandleManageSubscriptions(object sender, EventArgs e)
         {
-            ManageSubscriptionsWindow window = new ManageSubscriptionsWindow();
+            ManageSubscriptionsWindow window = new ManageSubscriptionsWindow(GetAccountStore());
             window.Owner = Application.Current.MainWindow;
             window.WindowStartupLocation = WindowStartupLocation.CenterOwner;
             window.ShowDialog();

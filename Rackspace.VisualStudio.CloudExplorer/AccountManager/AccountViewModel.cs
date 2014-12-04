@@ -8,7 +8,9 @@
 
         protected virtual void OnPropertyChanged(PropertyChangedEventArgs e)
         {
-            PropertyChanged?.Invoke(this, e);
+            var t = PropertyChanged;
+            if (t != null)
+                t(this, e);
         }
     }
 }

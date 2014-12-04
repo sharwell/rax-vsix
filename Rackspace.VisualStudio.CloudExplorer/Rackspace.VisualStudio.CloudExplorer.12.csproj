@@ -59,13 +59,17 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="AccountManager\AccountStore.cs" />
+    <Compile Include="AccountManager\AccountViewModel.cs" />
     <Compile Include="AccountManager\AddAccountWindow.xaml.cs">
       <DependentUpon>AddAccountWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="AccountManager\CustomWindowProperties.cs" />
+    <Compile Include="AccountManager\InvertedBooleanValueConverter.cs" />
     <Compile Include="AccountManager\ManageSubscriptionsWindow.xaml.cs">
       <DependentUpon>ManageSubscriptionsWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="AccountManager\RegionViewModel.cs" />
     <Compile Include="AccountManager\WindowExtensions.cs" />
     <Compile Include="AsyncNode.cs" />
     <Compile Include="Autoscale\CloudAutoscaleEndpointNode.cs" />
@@ -140,6 +144,10 @@
       <EmbedInteropTypes>False</EmbedInteropTypes>
       <Private>False</Private>
       <HintPath>..\packages\VSSDK.DTE.7.0.4\lib\net20\envdte.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.VisualStudio.ComponentModelHost, Version=12.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <Private>False</Private>
+      <HintPath>..\packages\VSSDK.ComponentModelHost.12.0.4\lib\net45\Microsoft.VisualStudio.ComponentModelHost.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.VisualStudio.GraphModel, Version=11.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <Private>False</Private>
@@ -217,6 +225,7 @@
       <HintPath>..\packages\VSSDK.DTE.7.0.4\lib\net20\stdole.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.Design" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Transactions" />

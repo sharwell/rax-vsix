@@ -7,9 +7,12 @@
         mc:Ignorable="d"
         Title="AddAccountWindow" Height="300" Width="300" ShowInTaskbar="False"
         local:CustomWindowProperties.CanMinimize="false" local:CustomWindowProperties.CanMaximize="false">
+    <Window.Resources>
+        <local:InvertedBooleanValueConverter x:Key="InvertedBooleanValueConverter"/>
+    </Window.Resources>
     <Grid>
-        <Button x:Name="btnClose" Content="Close" HorizontalAlignment="Left" Margin="207,238,0,0" VerticalAlignment="Top" Width="75" IsCancel="True" Click="btnClose_Click"/>
-        <Button x:Name="button" Content="OK" HorizontalAlignment="Left" Margin="127,238,0,0" VerticalAlignment="Top" Width="75"/>
+        <Button x:Name="btnClose" Content="Cancel" HorizontalAlignment="Left" Margin="207,238,0,0" VerticalAlignment="Top" Width="75" IsCancel="True" Click="btnClose_Click"/>
+        <Button x:Name="button" Content="OK" HorizontalAlignment="Left" Margin="127,238,0,0" VerticalAlignment="Top" Width="75" IsDefault="True" Click="HandleOkClick"/>
         <Label x:Name="label" Content="Provider:" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top"/>
         <ComboBox x:Name="comboBox" HorizontalAlignment="Left" Margin="82,10,0,0" VerticalAlignment="Top" Width="120" SelectedIndex="0">
             <Label Content="Rackspace"/>
@@ -17,9 +20,9 @@
         <Label x:Name="label1" Content="User name:" HorizontalAlignment="Left" Margin="10,41,0,0" VerticalAlignment="Top"/>
         <Label x:Name="label2" Content="Password:" HorizontalAlignment="Left" Margin="10,93,0,0" VerticalAlignment="Top"/>
         <Label x:Name="label3" Content="API Key:" HorizontalAlignment="Left" Margin="10,119,0,0" VerticalAlignment="Top"/>
-        <CheckBox x:Name="checkBox" Content="I know my API key" HorizontalAlignment="Left" Margin="10,72,0,0" VerticalAlignment="Top"/>
-        <TextBox x:Name="textBox" HorizontalAlignment="Left" Height="23" Margin="82,44,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="120" RenderTransformOrigin="-0.333,-0.174"/>
-        <PasswordBox x:Name="passwordBox" HorizontalAlignment="Left" Margin="82,93,0,0" VerticalAlignment="Top" Width="120"/>
-        <TextBox x:Name="textBox2" HorizontalAlignment="Left" Height="23" Margin="82,121,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="120" IsEnabled="{Binding IsChecked, ElementName=checkBox, Mode=OneWay}"/>
+        <CheckBox x:Name="chkHaveApiKey" Content="I know my API key" HorizontalAlignment="Left" Margin="10,72,0,0" VerticalAlignment="Top"/>
+        <TextBox x:Name="txtUsername" Height="23" Margin="82,44,10,0" TextWrapping="Wrap" VerticalAlignment="Top" RenderTransformOrigin="-0.333,-0.174"/>
+        <PasswordBox x:Name="txtPassword" Margin="82,93,10,0" VerticalAlignment="Top" IsEnabled="{Binding IsChecked, Converter={StaticResource InvertedBooleanValueConverter}, ElementName=chkHaveApiKey, Mode=OneWay}"/>
+        <TextBox x:Name="txtApiKey" Height="23" Margin="82,121,10,0" TextWrapping="Wrap" VerticalAlignment="Top" IsEnabled="{Binding IsChecked, ElementName=chkHaveApiKey, Mode=OneWay}"/>
     </Grid>
 </Window>
