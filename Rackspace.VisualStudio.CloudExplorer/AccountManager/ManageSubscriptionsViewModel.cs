@@ -3,6 +3,7 @@
     using System.Collections.Generic;
     using System.Collections.ObjectModel;
     using System.ComponentModel;
+    using System.Linq;
     using System.Windows;
 
     public class ManageSubscriptionsViewModel : INotifyPropertyChanged
@@ -32,17 +33,11 @@
 
         public event PropertyChangedEventHandler PropertyChanged;
 
-        public ReadOnlyCollection<AccountViewModel> Accounts
+        public ReadOnlyCollection<Account> Accounts
         {
             get
             {
-                List<AccountViewModel> accounts = new List<AccountViewModel>();
-                foreach (var credentials in _accountStore.Credentials)
-                {
-                    accounts.Add(new AccountViewModel { Name = credentials.Username });
-                }
-
-                return accounts.AsReadOnly();
+                return _accountStore.Credentials.ToList().AsReadOnly();
             }
         }
 

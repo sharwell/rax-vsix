@@ -59,6 +59,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="AccountManager\Account.cs" />
     <Compile Include="AccountManager\AccountStore.cs" />
     <Compile Include="AccountManager\AccountViewModel.cs" />
     <Compile Include="AccountManager\AddAccountWindow.xaml.cs">
@@ -71,6 +72,8 @@
       <DependentUpon>ManageSubscriptionsWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="AccountManager\RegionViewModel.cs" />
+    <Compile Include="AccountManager\RelayCommand.cs" />
+    <Compile Include="AccountManager\ViewModelConverter.cs" />
     <Compile Include="AccountManager\WindowExtensions.cs" />
     <Compile Include="AsyncNode.cs" />
     <Compile Include="Autoscale\CloudAutoscaleEndpointNode.cs" />
@@ -245,6 +248,7 @@
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
+    <Resource Include="Resources\remove-icon.png" />
     <None Include="Properties\vs2012\source.extension.vsixmanifest" />
     <Content Include="..\License.txt">
       <Link>License.txt</Link>

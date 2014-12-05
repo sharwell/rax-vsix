@@ -10,7 +10,6 @@
     using System.Windows;
     using Microsoft.VisualStudio.ComponentModelHost;
     using Microsoft.VSDesigner.ServerExplorer;
-    using net.openstack.Core.Domain;
     using Rackspace.VisualStudio.CloudExplorer.AccountManager;
 
     [Serializable]
@@ -64,9 +63,9 @@
         protected override Task<Node[]> CreateChildrenAsync(CancellationToken cancellationToken)
         {
             List<Node> rootNodes = new List<Node>();
-            foreach (CloudIdentity identity in GetAccountStore().Credentials)
+            foreach (Account account in GetAccountStore().Credentials)
             {
-                rootNodes.Add(new CloudProjectNode(identity));
+                rootNodes.Add(new CloudProjectNode(account.ToCloudIdentity()));
             }
 
             return Task.FromResult(rootNodes.ToArray());

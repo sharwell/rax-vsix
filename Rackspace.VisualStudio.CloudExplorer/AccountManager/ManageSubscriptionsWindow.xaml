@@ -8,11 +8,26 @@
         Title="Manage OpenStack Subscriptions" Height="435" Width="491" ShowInTaskbar="False"
         local:CustomWindowProperties.CanMinimize="false" local:CustomWindowProperties.CanMaximize="false">
     <Window.Resources>
+        <local:ViewModelConverter x:Key="AccountViewModelConverter" ViewModelType="{x:Type local:AccountViewModel}" />
+        <BooleanToVisibilityConverter x:Key="BooleanToVisibility" />
         <DataTemplate x:Key="AccountItemTemplate">
-            <StackPanel Orientation="Horizontal">
-                <CheckBox VerticalAlignment="Center"/>
-                <Label Content="{Binding Name, Mode=OneWay}"/>
-            </StackPanel>
+            <Grid Visibility="{Binding Exists, Converter={StaticResource BooleanToVisibility}}">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+
+                <CheckBox Grid.Row="0" Grid.Column="0" VerticalAlignment="Center"/>
+                <Label Grid.Row="0" Grid.Column="1" Content="{Binding Name, Mode=OneWay}"/>
+                <Button Grid.Row="0" Grid.Column="3" VerticalAlignment="Center" HorizontalAlignment="Right"
+                        Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}"
+                        Visibility="{Binding IsSelected, Converter={StaticResource BooleanToVisibility}, RelativeSource={RelativeSource AncestorType={x:Type ListBoxItem}, Mode=FindAncestor}}"
+                        Command="{Binding RemoveCommand}">
+                    <Image Source="/Rackspace.VisualStudio.CloudExplorer;component/Resources/remove-icon.png"/>
+                </Button>
+            </Grid>
         </DataTemplate>
         <DataTemplate x:Key="RegionItemTemplate">
             <StackPanel Orientation="Horizontal">
@@ -26,15 +41,26 @@
             <TabItem Header="Accounts">
                 <Grid Background="#FFE5E5E5">
                     <Label x:Name="label1" Content="The following accounts will be used to access your OpenStack resources:" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top"/>
-                    <ListView x:Name="listView" Margin="10,41,10,36" ItemTemplate="{StaticResource AccountItemTemplate}" ItemsSource="{Binding Accounts, Mode=OneWay}">
-                        <ListView.ItemsPanel>
-                            <ItemsPanelTemplate>
-                                <StackPanel/>
-                            </ItemsPanelTemplate>
-                        </ListView.ItemsPanel>
-                    </ListView>
+                    <ListBox x:Name="listView"
+                             Margin="10,41,10,36"
+                             ItemsSource="{Binding Accounts, Mode=OneWay}"
+                             ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+                        <ListBox.ItemContainerStyle>
+                            <Style TargetType="{x:Type ListBoxItem}">
+                                <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                            </Style>
+                        </ListBox.ItemContainerStyle>
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <ContentPresenter Content="{Binding Converter={StaticResource AccountViewModelConverter}}"
+                                                  ContentTemplate="{StaticResource AccountItemTemplate}"/>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
                     <Label x:Name="label2" HorizontalAlignment="Left" Margin="10,259,0,0" VerticalAlignment="Top">
-                        <Hyperlink Click="Hyperlink_Click" TextDecorations="{x:Null}">Add an account...</Hyperlink>
+                        <Hyperlink Click="Hyperlink_Click" TextDecorations="{x:Null}">
+                            <Run Text="Add an account..."/>
+                        </Hyperlink>
                     </Label>
                 </Grid>
             </TabItem>
@@ -54,7 +80,7 @@
                                         </DataTemplate>
                                     </GridViewColumn.HeaderTemplate>
                                     <GridViewColumn.HeaderContainerStyle>
-                                        <Style TargetType="GridViewColumnHeader">
+                                        <Style TargetType="{x:Type GridViewColumnHeader}">
                                             <Setter Property="HorizontalContentAlignment" Value="Left"/>
                                         </Style>
                                     </GridViewColumn.HeaderContainerStyle>

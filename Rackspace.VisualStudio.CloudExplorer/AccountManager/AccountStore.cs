@@ -20,7 +20,7 @@
             _serviceProvider = serviceProvider;
         }
 
-        public IEnumerable<CloudIdentity> Credentials
+        public IEnumerable<Account> Credentials
         {
             get
             {
@@ -41,18 +41,11 @@
                     string collectionPath = string.Format(@"{0}\{1}", AccountsCollectionPath, accountName);
 
                     string username;
-                    string password;
                     string apiKey;
                     ErrorHandler.ThrowOnFailure(settingsStore.GetStringOrDefault(collectionPath, "username", string.Empty, out username));
-                    ErrorHandler.ThrowOnFailure(settingsStore.GetStringOrDefault(collectionPath, "password", string.Empty, out password));
                     ErrorHandler.ThrowOnFailure(settingsStore.GetStringOrDefault(collectionPath, "apiKey", string.Empty, out apiKey));
 
-                    yield return new CloudIdentity
-                    {
-                        Username = username,
-                        Password = !string.IsNullOrEmpty(password) ? password : null,
-                        APIKey = !string.IsNullOrEmpty(apiKey) ? apiKey : null
-                    };
+                    yield return new Account(this, accountName, username, apiKey);
                 }
             }
         }
@@ -71,8 +64,24 @@
             string collectionPath = string.Format(@"{0}\{1}", AccountsCollectionPath, identity.Username);
             ErrorHandler.ThrowOnFailure(settingsStore.CreateCollection(collectionPath));
             ErrorHandler.ThrowOnFailure(settingsStore.SetString(collectionPath, "username", identity.Username));
-            ErrorHandler.ThrowOnFailure(settingsStore.SetString(collectionPath, "password", identity.Password ?? string.Empty));
             ErrorHandler.ThrowOnFailure(settingsStore.SetString(collectionPath, "apiKey", identity.APIKey ?? string.Empty));
+        }
+
+        public void RemoveAccount(Account account)
+        {
+            if (account == null)
+                throw new ArgumentNullException("account");
+
+            IVsWritableSettingsStore settingsStore = GetWritableSettingsStore();
+
+            string collectionPath = string.Format(@"{0}\{1}", AccountsCollectionPath, account.Id);
+
+            int exists;
+            ErrorHandler.ThrowOnFailure(settingsStore.CollectionExists(collectionPath, out exists));
+            if (exists == 0)
+                return;
+
+            ErrorHandler.ThrowOnFailure(settingsStore.DeleteCollection(collectionPath));
         }
 
         private IVsSettingsStore GetSettingsStore()

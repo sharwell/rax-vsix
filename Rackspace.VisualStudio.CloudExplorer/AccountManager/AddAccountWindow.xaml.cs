@@ -48,6 +48,7 @@
                     };
                 }
 
+                DialogResult = true;
                 _accountStore.AddAccount(identity);
             }
 

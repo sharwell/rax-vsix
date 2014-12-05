@@ -5,24 +5,45 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Rackspace.VisualStudio.CloudExplorer.AccountManager"
         mc:Ignorable="d"
-        Title="AddAccountWindow" Height="300" Width="300" ShowInTaskbar="False"
+        Title="AddAccountWindow" Height="220" Width="400" ShowInTaskbar="False"
         local:CustomWindowProperties.CanMinimize="false" local:CustomWindowProperties.CanMaximize="false">
     <Window.Resources>
         <local:InvertedBooleanValueConverter x:Key="InvertedBooleanValueConverter"/>
     </Window.Resources>
     <Grid>
-        <Button x:Name="btnClose" Content="Cancel" HorizontalAlignment="Left" Margin="207,238,0,0" VerticalAlignment="Top" Width="75" IsCancel="True" Click="btnClose_Click"/>
-        <Button x:Name="button" Content="OK" HorizontalAlignment="Left" Margin="127,238,0,0" VerticalAlignment="Top" Width="75" IsDefault="True" Click="HandleOkClick"/>
-        <Label x:Name="label" Content="Provider:" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top"/>
-        <ComboBox x:Name="comboBox" HorizontalAlignment="Left" Margin="82,10,0,0" VerticalAlignment="Top" Width="120" SelectedIndex="0">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+
+        <Label Grid.Row="0" Grid.Column="0" x:Name="label" Content="Provider:" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+        <ComboBox Grid.Row="0" Grid.Column="1" x:Name="comboBox" HorizontalAlignment="Left" VerticalAlignment="Center" Width="120" SelectedIndex="0">
             <Label Content="Rackspace"/>
         </ComboBox>
-        <Label x:Name="label1" Content="User name:" HorizontalAlignment="Left" Margin="10,41,0,0" VerticalAlignment="Top"/>
-        <Label x:Name="label2" Content="Password:" HorizontalAlignment="Left" Margin="10,93,0,0" VerticalAlignment="Top"/>
-        <Label x:Name="label3" Content="API Key:" HorizontalAlignment="Left" Margin="10,119,0,0" VerticalAlignment="Top"/>
-        <CheckBox x:Name="chkHaveApiKey" Content="I know my API key" HorizontalAlignment="Left" Margin="10,72,0,0" VerticalAlignment="Top"/>
-        <TextBox x:Name="txtUsername" Height="23" Margin="82,44,10,0" TextWrapping="Wrap" VerticalAlignment="Top" RenderTransformOrigin="-0.333,-0.174"/>
-        <PasswordBox x:Name="txtPassword" Margin="82,93,10,0" VerticalAlignment="Top" IsEnabled="{Binding IsChecked, Converter={StaticResource InvertedBooleanValueConverter}, ElementName=chkHaveApiKey, Mode=OneWay}"/>
-        <TextBox x:Name="txtApiKey" Height="23" Margin="82,121,10,0" TextWrapping="Wrap" VerticalAlignment="Top" IsEnabled="{Binding IsChecked, ElementName=chkHaveApiKey, Mode=OneWay}"/>
+
+        <Label Grid.Row="1" Grid.Column="0" x:Name="label1" Content="User name:" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+        <TextBox Grid.Row="1" Grid.Column="1" x:Name="txtUsername" TextWrapping="Wrap" VerticalAlignment="Center"/>
+
+        <CheckBox Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="1" x:Name="chkHaveApiKey" Content="I know my API key" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="3, 3, 3, 3"/>
+
+        <Label Grid.Row="3" Grid.Column="0" x:Name="label2" Content="Password:" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+        <PasswordBox Grid.Row="3" Grid.Column="1" x:Name="txtPassword" VerticalAlignment="Center" IsEnabled="{Binding IsChecked, Converter={StaticResource InvertedBooleanValueConverter}, ElementName=chkHaveApiKey, Mode=OneWay}"/>
+
+        <Label Grid.Row="4" Grid.Column="0" x:Name="label3" Content="API Key:" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+        <TextBox Grid.Row="4" Grid.Column="1" x:Name="txtApiKey" TextWrapping="Wrap" VerticalAlignment="Center" IsEnabled="{Binding IsChecked, ElementName=chkHaveApiKey, Mode=OneWay}"/>
+
+        <StackPanel Grid.Row="6" Grid.Column="0" Grid.ColumnSpan="2" Orientation="Horizontal" HorizontalAlignment="Right" Margin="3">
+            <Button x:Name="button" Content="OK" Margin="3" HorizontalAlignment="Left" VerticalAlignment="Top" Width="75" IsDefault="True" Click="HandleOkClick"/>
+            <Button x:Name="btnClose" Content="Cancel" Margin="3" HorizontalAlignment="Left" VerticalAlignment="Top" Width="75" IsCancel="True" Click="btnClose_Click"/>
+        </StackPanel>
     </Grid>
 </Window>
