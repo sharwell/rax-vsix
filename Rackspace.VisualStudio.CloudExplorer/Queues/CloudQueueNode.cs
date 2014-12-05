@@ -5,13 +5,11 @@
     using System.Drawing;
     using System.Threading.Tasks;
     using System.Windows.Forms;
-    using Microsoft.VisualStudio;
     using Microsoft.VSDesigner.ServerExplorer;
     using net.openstack.Core.Domain.Queues;
     using net.openstack.Providers.Rackspace;
     using Newtonsoft.Json;
     using CancellationToken = System.Threading.CancellationToken;
-    using CancellationTokenSource = System.Threading.CancellationTokenSource;
     using LocalizableProperties = Microsoft.VisualStudio.Shell.LocalizableProperties;
 
     public class CloudQueueNode : AsyncNode
@@ -39,7 +37,7 @@
         {
             get
             {
-                return ServerExplorerIcons.CloudDatabases;
+                return ServerExplorerIcons.CloudQueuesQueue;
             }
         }
 

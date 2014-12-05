@@ -255,6 +255,7 @@
     <Content Include="Resources\cloud-networks-icon.png" />
     <Content Include="Resources\cloud-orchestration-icon.png" />
     <Content Include="Resources\cloud-queues-icon.png" />
+    <Content Include="Resources\cloud-queues-queue-icon.png" />
     <Content Include="Resources\cloud-server-icon.png" />
     <Content Include="Resources\cloud-servers-icon.png" />
     <Content Include="Resources\private-cloud-icon.png" />
