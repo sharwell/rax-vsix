@@ -2,6 +2,7 @@
 {
     using System.Windows;
     using net.openstack.Core.Domain;
+    using net.openstack.Providers.Rackspace;
 
     public partial class AddAccountWindow : Window
     {
@@ -34,6 +35,18 @@
                     Password = hasApiKey ? null : txtPassword.Password,
                     APIKey = hasApiKey ? txtApiKey.Text : null
                 };
+
+                if (!hasApiKey)
+                {
+                    CloudIdentityProvider provider = new CloudIdentityProvider(identity);
+                    User user = provider.GetUserByName(identity.Username, identity);
+                    UserCredential userCredentials = provider.GetUserCredential(user.Id, "RAX-KSKEY:apiKeyCredentials", identity);
+                    identity = new CloudIdentity
+                    {
+                        Username = txtUsername.Text,
+                        APIKey = userCredentials.APIKey
+                    };
+                }
 
                 _accountStore.AddAccount(identity);
             }
