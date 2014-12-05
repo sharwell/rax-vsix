@@ -11,13 +11,13 @@
         <DataTemplate x:Key="AccountItemTemplate">
             <StackPanel Orientation="Horizontal">
                 <CheckBox VerticalAlignment="Center"/>
-                <Label Content="Account Name"/>
+                <Label Content="{Binding Name, Mode=OneWay}"/>
             </StackPanel>
         </DataTemplate>
         <DataTemplate x:Key="RegionItemTemplate">
             <StackPanel Orientation="Horizontal">
                 <CheckBox VerticalAlignment="Center"/>
-                <Label Content="{Binding Name}"/>
+                <Label Content="{Binding Name, Mode=OneWay}"/>
             </StackPanel>
         </DataTemplate>
     </Window.Resources>
@@ -26,13 +26,12 @@
             <TabItem Header="Accounts">
                 <Grid Background="#FFE5E5E5">
                     <Label x:Name="label1" Content="The following accounts will be used to access your OpenStack resources:" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top"/>
-                    <ListView x:Name="listView" Margin="10,41,10,36" ItemTemplate="{StaticResource AccountItemTemplate}">
+                    <ListView x:Name="listView" Margin="10,41,10,36" ItemTemplate="{StaticResource AccountItemTemplate}" ItemsSource="{Binding Accounts, Mode=OneWay}">
                         <ListView.ItemsPanel>
                             <ItemsPanelTemplate>
                                 <StackPanel/>
                             </ItemsPanelTemplate>
                         </ListView.ItemsPanel>
-                        <local:AccountViewModel/>
                     </ListView>
                     <Label x:Name="label2" HorizontalAlignment="Left" Margin="10,259,0,0" VerticalAlignment="Top">
                         <Hyperlink Click="Hyperlink_Click" TextDecorations="{x:Null}">Add an account...</Hyperlink>
@@ -42,7 +41,7 @@
             <TabItem Header="Regions">
                 <Grid Background="#FFE5E5E5">
                     <Label x:Name="label3" Content="Use OpenStack resources from the following regions:" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top"/>
-                    <ListView x:Name="listView2" Margin="10,41,10,10">
+                    <ListView x:Name="listView2" Margin="10,41,10,10" ItemsSource="{Binding Regions, Mode=OneWay}">
                         <ListView.View>
                             <GridView>
                                 <GridViewColumn Header="Region" CellTemplate="{StaticResource RegionItemTemplate}">
@@ -62,12 +61,6 @@
                                 </GridViewColumn>
                             </GridView>
                         </ListView.View>
-                        <local:RegionViewModel Name="Dallas (DFW)"/>
-                        <local:RegionViewModel Name="Hong Kong (HKG)"/>
-                        <local:RegionViewModel Name="Northern Virginia (IAD)"/>
-                        <local:RegionViewModel Name="Chicago (ORD)"/>
-                        <local:RegionViewModel Name="Sydney (SYD)"/>
-                        <local:RegionViewModel Name="Global"/>
                     </ListView>
                 </Grid>
             </TabItem>

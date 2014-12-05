@@ -4,17 +4,15 @@
 
     public partial class ManageSubscriptionsWindow : Window
     {
-        private readonly AccountStore _accountStore;
-
         private ManageSubscriptionsWindow()
         {
             InitializeComponent();
         }
 
-        internal ManageSubscriptionsWindow(AccountStore accountStore)
+        internal ManageSubscriptionsWindow(ManageSubscriptionsViewModel dataContext)
             : this()
         {
-            _accountStore = accountStore;
+            DataContext = dataContext;
         }
 
         private void btnClose_Click(object sender, RoutedEventArgs e)
@@ -24,10 +22,9 @@
 
         private void Hyperlink_Click(object sender, RoutedEventArgs e)
         {
-            AddAccountWindow addAccountWindow = new AddAccountWindow(_accountStore);
-            addAccountWindow.Owner = this;
-            addAccountWindow.WindowStartupLocation = WindowStartupLocation.CenterOwner;
-            addAccountWindow.ShowDialog();
+            ManageSubscriptionsViewModel dataContext = DataContext as ManageSubscriptionsViewModel;
+            if (dataContext != null)
+                dataContext.AddAccount(this);
         }
     }
 }

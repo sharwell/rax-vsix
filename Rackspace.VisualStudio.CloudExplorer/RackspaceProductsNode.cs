@@ -86,7 +86,8 @@
 
         private void HandleManageSubscriptions(object sender, EventArgs e)
         {
-            ManageSubscriptionsWindow window = new ManageSubscriptionsWindow(GetAccountStore());
+            ManageSubscriptionsViewModel viewModel = new ManageSubscriptionsViewModel(GetAccountStore());
+            ManageSubscriptionsWindow window = new ManageSubscriptionsWindow(viewModel);
             window.Owner = Application.Current.MainWindow;
             window.WindowStartupLocation = WindowStartupLocation.CenterOwner;
             window.ShowDialog();
