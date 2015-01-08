@@ -18,6 +18,7 @@
         private static readonly Lazy<Image> _cloudMonitoring = new Lazy<Image>(() => Resources.CloudMonitoringIcon);
         private static readonly Lazy<Image> _cloudNetworks = new Lazy<Image>(() => Resources.CloudNetworksIcon);
         private static readonly Lazy<Image> _cloudQueues = new Lazy<Image>(() => Resources.CloudQueuesIcon);
+        private static readonly Lazy<Image> _cloudQueuesQueue = new Lazy<Image>(() => Resources.CloudQueuesQueueIcon);
         private static readonly Lazy<Image> _cloudServer = new Lazy<Image>(() => Resources.CloudServerIcon);
         private static readonly Lazy<Image> _cloudServers = new Lazy<Image>(() => Resources.CloudServersIcon);
         private static readonly Lazy<Image> _privateCloud = new Lazy<Image>(() => Resources.PrivateCloudIcon);
@@ -124,6 +125,14 @@
             get
             {
                 return _cloudQueues.Value;
+            }
+        }
+
+        public static Image CloudQueuesQueue
+        {
+            get
+            {
+                return _cloudQueuesQueue.Value;
             }
         }
 

@@ -203,6 +203,16 @@ namespace Rackspace.VisualStudio.CloudExplorer {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap CloudQueuesQueueIcon {
+            get {
+                object obj = ResourceManager.GetObject("CloudQueuesQueueIcon", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap CloudServerIcon {
             get {
                 object obj = ResourceManager.GetObject("CloudServerIcon", resourceCulture);
